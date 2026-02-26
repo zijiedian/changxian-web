@@ -498,7 +498,7 @@ export default function ProjectPreview() {
                     </Link>
                     <div className="px-3 py-1 text-[11px] text-muted">更多工具敬请期待</div>
                     <Link to="/articles" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                      文章
+                      博客
                     </Link>
                     <Link to="/about" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
                       关于我们
@@ -535,7 +535,7 @@ export default function ProjectPreview() {
                   </div>
                 </div>
                 <Link to="/articles" className="px-3 py-2 text-muted transition hover:text-ink">
-                  文章
+                  博客
                 </Link>
               <Link to="/about" className="px-3 py-2 text-muted transition hover:text-ink">
                 关于我们
@@ -785,7 +785,7 @@ export default function ProjectPreview() {
                     to="/articles"
                     className="rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-semibold text-ink"
                   >
-                    发布到文章
+                    发布到博客
                   </Link>
                   {chatStatus && <span className="text-[11px] text-muted">{chatStatus}</span>}
                 </div>
