@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <style>
+      .node { opacity: 0; animation: fadeIn 1s forwards; }
+      .line { stroke-dasharray: 500; stroke-dashoffset: 500; animation: drawLine 1s forwards; }
+      .delay-1 { animation-delay: 1s; }
+      .delay-2 { animation-delay: 2s; }
+      .delay-3 { animation-delay: 3s; }
+      .delay-4 { animation-delay: 4s; }
+      
+      @keyframes fadeIn { 
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); } 
+      }
+      @keyframes drawLine { 
+        to { stroke-dashoffset: 0; } 
+      }
+      text { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="800" height="600" fill="#f4f7f6"/>
+
+  <g class="node">
+    <circle cx="400" cy="300" r="70" fill="#2E3B4E" stroke="#E2E8F0" stroke-width="4"/>
+    <text x="400" y="295" fill="white" font-size="24" font-weight="bold" text-anchor="middle">MiniMax</text>
+    <text x="400" y="320" fill="#A0AEC0" font-size="14" text-anchor="middle">全模态 AI 引擎</text>
+  </g>
+
+  <line x1="350" y1="250" x2="220" y2="160" stroke="#3182CE" stroke-width="3" class="line delay-1"/>
+  <line x1="450" y1="250" x2="580" y2="160" stroke="#E53E3E" stroke-width="3" class="line delay-2"/>
+  <line x1="350" y1="350" x2="220" y2="440" stroke="#D69E2E" stroke-width="3" class="line delay-3"/>
+  <line x1="450" y1="350" x2="580" y2="440" stroke="#805AD5" stroke-width="3" class="line delay-4"/>
+
+  <g class="node delay-1">
+    <circle cx="200" cy="140" r="65" fill="#3182CE"/>
+    <text x="200" y="125" fill="white" font-size="16" font-weight="bold" text-anchor="middle">文本与代码大模型</text>
+    <text x="200" y="145" fill="#EBF8FF" font-size="12" text-anchor="middle">M2.5 / 早期abab系列</text>
+    <text x="200" y="165" fill="#EBF8FF" font-size="11" text-anchor="middle">代码生成与复杂推理</text>
+  </g>
+
+  <g class="node delay-2">
+    <circle cx="600" cy="140" r="65" fill="#E53E3E"/>
+    <text x="600" y="125" fill="white" font-size="16" font-weight="bold" text-anchor="middle">视频生成模型</text>
+    <text x="600" y="145" fill="#FFF5F5" font-size="12" text-anchor="middle">Hailuo (海螺) 2.3</text>
+    <text x="600" y="165" fill="#FFF5F5" font-size="11" text-anchor="middle">物理规律与动态表现</text>
+  </g>
+
+  <g class="node delay-3">
+    <circle cx="200" cy="460" r="65" fill="#D69E2E"/>
+    <text x="200" y="445" fill="white" font-size="16" font-weight="bold" text-anchor="middle">语音与音乐模型</text>
+    <text x="200" y="465" fill="#FFFFF0" font-size="12" text-anchor="middle">Speech 2.6 / Music 2.5</text>
+    <text x="200" y="485" fill="#FFFFF0" font-size="11" text-anchor="middle">高保真音色与音乐生成</text>
+  </g>
+
+  <g class="node delay-4">
+    <circle cx="600" cy="460" r="65" fill="#805AD5"/>
+    <text x="600" y="445" fill="white" font-size="16" font-weight="bold" text-anchor="middle">核心 C端应用</text>
+    <text x="600" y="465" fill="#FAF5FF" font-size="12" text-anchor="middle">星野 (Talkie) / 海螺AI</text>
+    <text x="600" y="485" fill="#FAF5FF" font-size="11" text-anchor="middle">虚拟角色互动与创作</text>
+  </g>
+</svg>

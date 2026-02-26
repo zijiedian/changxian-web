@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gemini 3.1 Pro 新模型 | 功能与对比</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --ink: #0b1320;
+      --muted: #52606d;
+      --brand: #6b5cff;
+      --brand-2: #2dd4bf;
+      --line: #e6e8ee;
+      --shadow: 0 10px 30px rgba(12, 20, 33, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #5b6cff 0%, #7c5cff 45%, #2dd4bf 100%);
+      color: #fff;
+      padding: 28px 22px 26px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      filter: blur(2px);
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: 0.2px;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    .meta {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .badge {
+      background: rgba(255, 255, 255, 0.18);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    .section {
+      margin-top: 20px;
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid #f0f2f6;
+    }
+
+    .section h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section h2 span {
+      display: inline-flex;
+      width: 26px;
+      height: 26px;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0ff;
+      border-radius: 8px;
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .lead {
+      font-size: 15px;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    .card {
+      border-radius: 14px;
+      padding: 14px;
+      background: #f8f9ff;
+      border: 1px solid #eef1ff;
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .card p { margin: 0; font-size: 13px; color: var(--muted); }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      background: #f1f5ff;
+      color: #4251b8;
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 999px;
+    }
+
+    .compare {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .compare .card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+    }
+
+    .compare h3 {
+      font-size: 17px;
+      margin-bottom: 8px;
+    }
+
+    .compare ul {
+      padding-left: 18px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .highlight {
+      background: linear-gradient(120deg, rgba(107, 92, 255, 0.15), rgba(45, 212, 191, 0.15));
+      border: 1px solid rgba(107, 92, 255, 0.25);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 13px;
+      color: #2f3a55;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--brand);
+      margin-top: 6px;
+      box-shadow: 0 0 0 4px rgba(107, 92, 255, 0.15);
+    }
+
+    .footer {
+      margin-top: 18px;
+      font-size: 11px;
+      color: #7c8798;
+    }
+
+    .footer a { color: #6b5cff; text-decoration: none; }
+
+    @media (max-width: 820px) {
+      .grid.cols-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .compare { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 24px; }
+      .hero p { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <h1>Gemini 3.1 Pro 新模型</h1>
+      <p>面向高复杂度任务的旗舰级推理模型，原生多模态 + 超长上下文，适合做“深度思考型”应用。</p>
+      <div class="meta">
+        <div class="badge">发布时间：2026-02-19</div>
+        <div class="badge">官方模型卡：2026-02</div>
+        <div class="badge">使用场景：复杂推理 / 代码 / 代理工作流</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span>1</span>一句话总结</h2>
+      <p class="lead">Gemini 3.1 Pro 是 Gemini 3 系列的最新迭代，官方称其为“目前最先进”的复杂任务模型，能在文本、图像、音频、视频与代码仓库等多模态信息上进行高强度推理。</p>
+    </section>
+
+    <section class="section">
+      <h2><span>2</span>核心能力</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>原生多模态理解</h3>
+          <p>可直接理解文本、图像、音频、视频与大型代码库，适合综合分析与跨模态推理。</p>
+        </div>
+        <div class="card">
+          <h3>复杂任务推理</h3>
+          <p>面向高难度问题设计，强调深度推理与多步规划，适合复杂业务与研究场景。</p>
+        </div>
+        <div class="card">
+          <h3>超长上下文</h3>
+          <p>最高可处理约 1M token 输入，并支持 64K token 输出，适合长文档与大规模资料。</p>
+        </div>
+        <div class="card">
+          <h3>高级编码与代理工作流</h3>
+          <p>强调 agentic 表现与高级编码能力，可用于构建自动化工作流与复杂算法开发。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span>3</span>适合场景</h2>
+      <p class="lead">官方强调其适用于需要“更强推理与复杂度”的应用，以下是典型方向：</p>
+      <div class="pill-list">
+        <div class="pill">复杂问题拆解与多步决策</div>
+        <div class="pill">跨模态综合分析</div>
+        <div class="pill">长文档/海量资料理解</div>
+        <div class="pill">高级编程与算法设计</div>
+        <div class="pill">自动化代理与工具编排</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span>4</span>官方对比要点</h2>
+      <div class="compare">
+        <div class="card">
+          <h3>Gemini 3.1 Pro（最新迭代）</h3>
+          <ul>
+            <li>Gemini 3 系列的下一代版本</li>
+            <li>官方称为“最先进”的复杂任务模型</li>
+            <li>在推理与多模态基准上显著领先 3 Pro</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Gemini 3 Pro（基础版本）</h3>
+          <ul>
+            <li>作为 3.1 Pro 的基础模型与依赖版本</li>
+            <li>是 3.1 Pro 发布前的主要基线</li>
+            <li>在多项评测上被 3.1 Pro 拉开差距</li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight" style="margin-top: 12px;">
+        公开评测示例：在 ARC-AGI-2 基准中，Gemini 3.1 Pro 取得 77.1%，而 Gemini 3 Pro 为 31.1%。
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span>5</span>发布与可用性</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="dot"></div>
+          <div>
+            <strong>普通用户</strong>：Gemini App 正在逐步开放，Google AI Pro / Ultra 计划可获得更高额度；NotebookLM 目前仅对 Pro / Ultra 用户开放。
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="dot"></div>
+          <div>
+            <strong>开发者（预览）</strong>：Google AI Studio / Gemini API / Antigravity / Gemini CLI / Android Studio 可用。
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="dot"></div>
+          <div>
+            <strong>企业用户（预览）</strong>：Vertex AI 与 Gemini Enterprise 提供接入。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span>6</span>截图友好设计说明</h2>
+      <p class="lead">本页为纵向图文风格，适合手机浏览与一屏一段截图；可直接作为小红书/微信图文素材。</p>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>单列布局</h3>
+          <p>信息分块清晰，截图时不易断层。</p>
+        </div>
+        <div class="card">
+          <h3>高对比配色</h3>
+          <p>亮底深字，阅读舒适、辨识度高。</p>
+        </div>
+        <div class="card">
+          <h3>视觉节奏</h3>
+          <p>重点内容用卡片和高亮条，便于快速扫读。</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      资料来源：Google DeepMind 模型卡与 Google 官方博客（2026-02-19）。具体功能与可用范围以官方后续更新为准。
+      <br/>
+      Sources: <a href="https://deepmind.google/models/model-cards/gemini-3-1-pro/">Model Card</a> ·
+      <a href="https://blog.google/intl/ko-kr/products/gemini-3-1-pro-kr/">Google Blog</a>
+    </div>
+  </div>
+</body>
+</html>

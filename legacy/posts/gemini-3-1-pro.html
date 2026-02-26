@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>尝鲜AI | Gemini 3.1 Pro · 社论海报</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f2efe9;
+      --ink: #1a1a1a;
+      --muted: #5c5c5c;
+      --accent: #d95e00;
+      --line: rgba(26, 26, 26, 0.12);
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Noto Sans SC", system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    .track {
+      height: 100vh;
+      display: flex;
+      gap: 28px;
+      padding: 30px 0 64px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .track::-webkit-scrollbar { display: none; }
+
+    .slide {
+      flex: 0 0 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 18px 16px 24px;
+      scroll-snap-align: start;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .slide::-webkit-scrollbar { display: none; }
+
+    .page {
+      width: min(600px, 92vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .poster-wrap {
+      width: 600px;
+      height: 800px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .poster {
+      width: 600px;
+      height: 800px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 40px 42px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      position: relative;
+      transform-origin: top center;
+    }
+
+    .poster.light { background: var(--bg); }
+
+    .poster.dark {
+      background: #121212;
+      color: #f2efe9;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .poster.dark .muted,
+    .poster.dark .meta,
+    .poster.dark .label { color: rgba(242, 239, 233, 0.7); }
+
+    .poster.dark .line { background: rgba(255, 255, 255, 0.15); }
+
+    .poster.dark .accent {
+      background: #f2efe9;
+      color: #121212;
+    }
+
+    .poster::before {
+      content: "";
+      position: absolute;
+      inset: 26px;
+      border: 1px solid var(--line);
+      pointer-events: none;
+    }
+
+    .poster.dark::before { border-color: rgba(255, 255, 255, 0.16); }
+
+    .meta {
+      font-family: "Oswald", sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Noto Serif SC", serif;
+      font-size: 60px;
+      line-height: 1.02;
+      letter-spacing: 0.4px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-family: "Noto Serif SC", serif;
+      font-size: 30px;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--muted); }
+
+    .subtitle {
+      font-size: 19px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-top: 12px;
+    }
+
+    .poster.dark .subtitle { color: #f2efe9; }
+
+    .accent-bar {
+      width: 150px;
+      height: 6px;
+      background: var(--accent);
+      margin-top: 12px;
+    }
+
+    .corner {
+      position: absolute;
+      top: 28px;
+      right: 32px;
+      font-family: "Oswald", sans-serif;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .line { height: 1px; background: var(--line); }
+
+    .list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .num {
+      font-family: "Oswald", sans-serif;
+      font-size: 24px;
+      color: var(--accent);
+    }
+
+    .poster.dark .num { color: #f2efe9; }
+
+    .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--muted);
+    }
+
+    .accent {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .pill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .poster.dark .pill {
+      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(242, 239, 233, 0.78);
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .data-box {
+      border: 1px solid var(--line);
+      padding: 12px;
+      display: grid;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .poster.dark .data-box {
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .data-value {
+      font-family: "Oswald", sans-serif;
+      font-size: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .poster.dark .footer { color: rgba(242, 239, 233, 0.7); }
+
+    .caption {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      padding: 14px 16px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+      display: grid;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .caption-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .caption-list {
+      display: grid;
+      gap: 4px;
+      font-size: 12.5px;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+      opacity: 0.06;
+      z-index: 5;
+    }
+
+    .progress {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      background: rgba(242, 239, 233, 0.92);
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      border-radius: 999px;
+      z-index: 8;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(26, 26, 26, 0.2);
+    }
+
+    .dot.active { background: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="track" id="track">
+    <section class="slide">
+      <div class="page">
+        <div class="poster-wrap">
+          <article class="poster light">
+            <div>
+              <div class="meta">Gemini Series · 2026 / 02 / 19</div>
+              <h1>Gemini 3.1 Pro</h1>
+              <div class="subtitle">旗舰复杂任务模型 · 多模态 · 超长上下文</div>
+              <div class="accent-bar"></div>
+            </div>
+            <div>
+              <p>Google DeepMind 发布的 Gemini 3 系列新迭代，被定位为“最先进的复杂任务模型”。</p>
+              <div class="line" style="margin: 16px 0;"></div>
+              <div class="list">
+                <div class="item">
+                  <div class="num">01</div>
+                  <div>
+                    <h3>原生多模态</h3>
+                    <p>文本、图像、音频、视频、代码库直接输入。</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="num">02</div>
+                  <div>
+                    <h3>超长上下文</h3>
+                    <p>最高 1M token 输入 / 64K token 输出。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <span>Card 01 · Cover</span>
+              <span>尝鲜AI</span>
+            </div>
+            <div class="corner">NO.01</div>
+          </article>
+        </div>
+        <div class="caption">
+          <div class="caption-title">这是一款“复杂任务旗舰”</div>
+          <div class="caption-list">
+            <div>• 系列定位：Gemini 3 的新迭代与旗舰复杂任务模型。</div>
+            <div>• 形态能力：原生多模态 + 超长上下文窗口。</div>
+          </div>
+          <p>适合需要深度推理与跨模态整合的场景。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="page">
+        <div class="poster-wrap">
+          <article class="poster light">
+            <div>
+              <div class="meta">Core Capabilities</div>
+              <h2>核心能力图谱</h2>
+              <div class="accent">Complex Reasoning</div>
+            </div>
+            <div>
+              <div class="list">
+                <div class="item">
+                  <div class="num">01</div>
+                  <div>
+                    <h3>复杂推理与规划</h3>
+                    <p>多步推理、策略规划与任务拆解。</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="num">02</div>
+                  <div>
+                    <h3>Agentic 工作流</h3>
+                    <p>强调工具编排、自动化与复合任务处理。</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="num">03</div>
+                  <div>
+                    <h3>高级编码能力</h3>
+                    <p>适合算法设计、代码库理解与复杂工程。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <span>Card 02 · Capability</span>
+              <span>Gemini 3.1 Pro</span>
+            </div>
+            <div class="corner">NO.02</div>
+          </article>
+        </div>
+        <div class="caption">
+          <div class="caption-title">能力关键词：推理、规划、代理</div>
+          <div class="caption-list">
+            <div>• 强调“多步推理 + 任务拆解”。</div>
+            <div>• 适配自动化工作流与复杂编码任务。</div>
+          </div>
+          <p>适合工程化场景与更高复杂度问题求解。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="page">
+        <div class="poster-wrap">
+          <article class="poster dark">
+            <div>
+              <div class="meta">Key Data</div>
+              <h2>关键数据一览</h2>
+              <div class="subtitle">官方模型卡核心指标</div>
+            </div>
+            <div>
+              <div class="data-grid">
+                <div class="data-box">
+                  <div class="label">输入上限</div>
+                  <div class="data-value">1M</div>
+                  <div class="muted">tokens</div>
+                </div>
+                <div class="data-box">
+                  <div class="label">输出上限</div>
+                  <div class="data-value">64K</div>
+                  <div class="muted">tokens</div>
+                </div>
+                <div class="data-box">
+                  <div class="label">定位</div>
+                  <div class="data-value">旗舰复杂任务</div>
+                  <div class="muted">Gemini 3 系列下一代</div>
+                </div>
+                <div class="data-box">
+                  <div class="label">评测模式</div>
+                  <div class="data-value">Thinking High</div>
+                  <div class="muted">官方评测表</div>
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <span>Card 03 · Data (Dark)</span>
+              <span>Key Metrics</span>
+            </div>
+            <div class="corner">NO.03</div>
+          </article>
+        </div>
+        <div class="caption">
+          <div class="caption-title">超长上下文 + 高强度评测</div>
+          <div class="caption-list">
+            <div>• 1M 输入 + 64K 输出为核心硬指标。</div>
+            <div>• 评测处于 Thinking (High) 模式。</div>
+          </div>
+          <p>适合处理大规模知识库、长文档与多模态资料。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="page">
+        <div class="poster-wrap">
+          <article class="poster light">
+            <div>
+              <div class="meta">Benchmarks</div>
+              <h2>3.1 Pro vs 3 Pro</h2>
+              <div class="accent">官方评测对比</div>
+            </div>
+            <div class="list">
+              <div class="item">
+                <div class="num">01</div>
+                <div>
+                  <h3>ARC-AGI-2</h3>
+                  <p>77.1% vs 31.1%（抽象推理）</p>
+                </div>
+              </div>
+              <div class="item">
+                <div class="num">02</div>
+                <div>
+                  <h3>Humanity’s Last Exam</h3>
+                  <p>44.4% vs 37.5%（多模态学术）</p>
+                </div>
+              </div>
+              <div class="item">
+                <div class="num">03</div>
+                <div>
+                  <h3>GPQA Diamond</h3>
+                  <p>94.3% vs 91.9%（科学推理）</p>
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <span>Card 04 · Benchmarks</span>
+              <span>官方模型卡</span>
+            </div>
+            <div class="corner">NO.04</div>
+          </article>
+        </div>
+        <div class="caption">
+          <div class="caption-title">相对 3 Pro 的提升</div>
+          <div class="caption-list">
+            <div>• ARC-AGI-2 提升最明显。</div>
+            <div>• HLE 与 GPQA 也有稳定提升。</div>
+          </div>
+          <p>体现复杂推理与学术任务的整体进步。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="page">
+        <div class="poster-wrap">
+          <article class="poster light">
+            <div>
+              <div class="meta">Competitors</div>
+              <h2>竞品对比</h2>
+              <div class="subtitle">统一评测表 · ARC-AGI-2 / HLE / GPQA</div>
+            </div>
+            <div class="pill-grid">
+              <div class="pill">Gemini 3.1 Pro：77.1 / 44.4 / 94.3</div>
+              <div class="pill">Anthropic Sonnet 4.6：58.3 / 33.2 / 89.9</div>
+              <div class="pill">Anthropic Opus 4.6：68.8 / 40.0 / 91.3</div>
+              <div class="pill">OpenAI GPT-5.2：52.9 / 34.5 / 92.4</div>
+            </div>
+            <div class="line" style="margin-top: 18px;"></div>
+            <p>数据来自官方模型卡评测表，便于横向参考。</p>
+            <div class="footer">
+              <span>Card 05 · Comparison</span>
+              <span>官方评测</span>
+            </div>
+            <div class="corner">NO.05</div>
+          </article>
+        </div>
+        <div class="caption">
+          <div class="caption-title">统一基准下的横向参考</div>
+          <div class="caption-list">
+            <div>• 同一评测表更易直观比较。</div>
+            <div>• 3.1 Pro 在多项基准领先。</div>
+          </div>
+          <p>适合快速了解旗舰模型的相对位置。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="page">
+        <div class="poster-wrap">
+          <article class="poster light">
+            <div>
+              <div class="meta">Availability & Usage</div>
+              <h2>发布渠道与适用场景</h2>
+            </div>
+            <div>
+              <div class="list">
+                <div class="item">
+                  <div class="num">01</div>
+                  <div>
+                    <h3>可用渠道</h3>
+                    <p>Gemini App、NotebookLM、Gemini API、AI Studio、Google Cloud / Vertex AI。</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="num">02</div>
+                  <div>
+                    <h3>适用任务</h3>
+                    <p>复杂推理、长文档分析、跨模态理解、代码库分析与代理工作流。</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="num">03</div>
+                  <div>
+                    <h3>使用提示</h3>
+                    <p>评测与限制会随模型卡更新，复杂任务建议引入人工校验。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <span>Card 06 · Outro</span>
+              <span>尝鲜AI · 关注新模型</span>
+            </div>
+            <div class="corner">NO.06</div>
+          </article>
+        </div>
+        <div class="caption">
+          <div class="caption-title">从消费端到企业端</div>
+          <div class="caption-list">
+            <div>• 覆盖 App、API、Cloud 全链路。</div>
+            <div>• 复杂场景建议加入人工校验。</div>
+          </div>
+          <p>最终可用范围以官方更新为准。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="progress" id="progress">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <svg class="noise" width="100%" height="100%">
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#noiseFilter)"></rect>
+  </svg>
+
+  <script>
+    function updateScale() {
+      const vh = window.innerHeight;
+      const pages = document.querySelectorAll('.page');
+      pages.forEach((page) => {
+        const wrap = page.querySelector('.poster-wrap');
+        const poster = page.querySelector('.poster');
+        const caption = page.querySelector('.caption');
+        const gap = 12;
+        const padding = 64;
+        const available = vh - padding;
+        const rawScale = (available - caption.offsetHeight - gap) / 800;
+        const scale = Math.min(1, Math.max(0.6, rawScale));
+        poster.style.transform = `scale(${scale})`;
+        wrap.style.width = `${600 * scale}px`;
+        wrap.style.height = `${800 * scale}px`;
+      });
+    }
+
+    function updateDots() {
+      const track = document.getElementById('track');
+      const dots = Array.from(document.querySelectorAll('.dot'));
+      const index = Math.round(track.scrollLeft / track.clientWidth);
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === Math.min(index, dots.length - 1));
+      });
+    }
+
+    function init() {
+      updateScale();
+      updateDots();
+    }
+
+    window.addEventListener('resize', () => {
+      window.requestAnimationFrame(updateScale);
+      window.requestAnimationFrame(updateDots);
+    });
+
+    const track = document.getElementById('track');
+    let ticking = false;
+    track.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateDots();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    window.addEventListener('load', init);
+  </script>
+</body>
+</html>
