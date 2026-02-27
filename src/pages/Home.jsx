@@ -192,7 +192,7 @@ export default function Home() {
                 </div>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:gap-4">
                   {[
-                    { label: '最新博客', value: 'MiniMax 2026' },
+                    { label: '最新博客', value: 'C2 框架全景' },
                     { label: '模型评测', value: 'Gemini 3.1 Pro' },
                     { label: '图文生成', value: '已上线' },
                     { label: '导出方式', value: 'PNG 卡片' },
@@ -262,21 +262,21 @@ export default function Home() {
             <article className="rounded-3xl bg-gradient-to-br from-brand/20 via-white to-transparent p-[1px] shadow-soft">
               <div className="flex min-h-[220px] flex-col justify-between rounded-3xl border border-gray-200 bg-white p-6">
               <div>
-                <div className="text-xs text-muted">2026-02-19 · 深度评测</div>
+                <div className="text-xs text-muted">2026-02-27 · AI安全</div>
                 <h3 className="mt-3 text-xl font-semibold text-ink">
-                  Gemini 3.1 Pro 新模型：功能、对比与应用场景
+                  AI安全：开源与闭源 C2 框架全景
                 </h3>
                 <p className="mt-3 text-sm text-muted">
-                  科技杂志风信息卡片：核心能力、评测对比、Agentic、长上下文与安全评估。
+                  聚焦生态、能力与治理的安全视角分析，并附公开截图与 GitHub 链接。
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between text-xs text-muted">
-                <span>阅读时长：8 分钟</span>
+                <span>阅读时长：9 分钟</span>
                 <div className="flex items-center gap-3">
-                  <Link to="/generator?preset=gemini-3-1-pro" className="font-semibold text-brand">
+                  <Link to="/generator?preset=ai-security-c2" className="font-semibold text-brand">
                     生成卡片 →
                   </Link>
-                  <Link to="/posts/gemini-3-1-pro" className="font-semibold text-muted">
+                  <Link to="/posts/ai-security-c2" className="font-semibold text-muted">
                     阅读博客 →
                   </Link>
                 </div>
@@ -285,17 +285,17 @@ export default function Home() {
             </article>
             <article className="flex min-h-[220px] flex-col justify-between rounded-3xl border border-gray-200 bg-white/90 p-6 shadow-soft">
               <div>
-                <div className="text-xs text-muted">2026-02-25 · 公司研究</div>
-                <h3 className="mt-3 text-lg font-semibold text-ink">MiniMax 公司介绍：最新模型与梯队判断</h3>
-                <p className="mt-3 text-sm text-muted">M2.5、M2.1、M1 与多模态矩阵解析。</p>
+                <div className="text-xs text-muted">2026-02-19 · 模型评测</div>
+                <h3 className="mt-3 text-lg font-semibold text-ink">Gemini 3.1 Pro 新模型：功能、对比与应用场景</h3>
+                <p className="mt-3 text-sm text-muted">核心能力、评测对比、Agentic、长上下文与安全评估。</p>
               </div>
               <div className="mt-6 flex items-center justify-between text-xs text-muted">
-                <span>阅读时长：7 分钟</span>
+                <span>阅读时长：8 分钟</span>
                 <div className="flex items-center gap-3">
-                  <Link to="/generator?preset=minimax-2026" className="font-semibold text-brand">
+                  <Link to="/generator?preset=gemini-3-1-pro" className="font-semibold text-brand">
                     生成卡片 →
                   </Link>
-                  <Link to="/posts/minimax-2026" className="font-semibold text-muted">
+                  <Link to="/posts/gemini-3-1-pro" className="font-semibold text-muted">
                     阅读博客 →
                   </Link>
                 </div>

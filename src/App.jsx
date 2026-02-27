@@ -8,6 +8,7 @@ import ProjectPreview from './pages/ProjectPreview.jsx';
 import Login from './pages/Login.jsx';
 import Profile from './pages/Profile.jsx';
 import MiniMax2026 from './pages/MiniMax2026.jsx';
+import AISecurityC2 from './pages/AISecurityC2.jsx';
 
 // 登录保护路由组件
 function ProtectedRoute({ children }) {
@@ -34,6 +35,7 @@ export default function App() {
       } />
       <Route path="/posts/gemini-3-1-pro" element={<Gemini31Pro />} />
       <Route path="/posts/minimax-2026" element={<MiniMax2026 />} />
+      <Route path="/posts/ai-security-c2" element={<AISecurityC2 />} />
     </Routes>
   );
 }
