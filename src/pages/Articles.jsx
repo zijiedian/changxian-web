@@ -5,6 +5,18 @@ import SiteHeader from '../components/SiteHeader.jsx';
 
 const ARTICLES = [
   {
+    id: 'opencode-architecture',
+    title: 'OpenCode 项目拆解：Agent Code 架构设计全景',
+    desc: '基于 dev 分支源码，拆解技术栈、目录、执行循环、权限系统与前后端边界。',
+    date: '2026-02-28',
+    category: '工程拆解',
+    channel: 'AI编程',
+    tags: ['OpenCode', 'Agent', '架构设计', 'TypeScript'],
+    read: '12 分钟',
+    preset: 'opencode-architecture',
+    url: '/posts/opencode-architecture',
+  },
+  {
     id: 'ai-security-c2',
     title: 'AI安全：开源与闭源 C2 框架全景',
     desc: '聚焦生态、能力与治理的安全视角分析，并附公开截图与 GitHub 链接。',
@@ -151,7 +163,7 @@ export default function Articles() {
               <p className="mt-1 text-sm text-muted">支持生成卡片与阅读全文。</p>
             </div>
             <span className="soft-button soft-button-secondary px-3 py-1 text-muted">
-              更新日期：2026-02-25
+              更新日期：{ARTICLES[0]?.date || '—'}
             </span>
           </div>
           <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_0.6fr] xl:grid-cols-[1.5fr_0.5fr]">
