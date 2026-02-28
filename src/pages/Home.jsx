@@ -125,7 +125,7 @@ export default function Home() {
                 </div>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:gap-4">
                   {[
-                    { label: '最新博客', value: 'C2 框架全景' },
+                    { label: '最新博客', value: '网络安全行业全景' },
                     { label: '模型评测', value: 'Gemini 3.1 Pro' },
                     { label: '图文生成', value: '已上线' },
                     { label: '导出方式', value: 'PNG 卡片' },
@@ -195,21 +195,21 @@ export default function Home() {
             <article className="theme-gradient-border rounded-3xl shadow-soft">
               <div className="glass-card flex min-h-[220px] flex-col justify-between rounded-3xl p-6">
               <div>
-                <div className="text-xs text-muted">2026-02-27 · AI安全</div>
+                <div className="text-xs text-muted">2026-02-28 · 行业研究</div>
                 <h3 className="mt-3 text-xl font-semibold text-ink">
-                  AI安全：开源与闭源 C2 框架全景
+                  中国网络安全行业全景：领域、岗位与技术能力地图（2026）
                 </h3>
                 <p className="mt-3 text-sm text-muted">
-                  聚焦生态、能力与治理的安全视角分析，并附公开截图与 GitHub 链接。
+                  深度调研中国网络安全赛道、就业岗位与技术栈，并附 SVG 思维导图。
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between text-xs text-muted">
-                <span>阅读时长：9 分钟</span>
+                <span>阅读时长：18 分钟</span>
                 <div className="flex items-center gap-3">
-                  <Link to="/generator?preset=ai-security-c2" className="font-semibold text-brand">
+                  <Link to="/generator?preset=china-cybersecurity-industry-2026" className="font-semibold text-brand">
                     生成卡片 →
                   </Link>
-                  <Link to="/posts/ai-security-c2" className="font-semibold text-muted">
+                  <Link to="/posts/china-cybersecurity-industry-2026" className="font-semibold text-muted">
                     阅读博客 →
                   </Link>
                 </div>

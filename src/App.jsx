@@ -11,6 +11,7 @@ import MiniMax2026 from './pages/MiniMax2026.jsx';
 import AISecurityC2 from './pages/AISecurityC2.jsx';
 import PromptNavigator from './pages/PromptNavigator.jsx';
 import OpenCodeArchitecture from './pages/OpenCodeArchitecture.jsx';
+import ChinaCybersecurityIndustry2026 from './pages/ChinaCybersecurityIndustry2026.jsx';
 
 // 登录保护路由组件
 function ProtectedRoute({ children }) {
@@ -40,6 +41,7 @@ export default function App() {
       <Route path="/posts/minimax-2026" element={<MiniMax2026 />} />
       <Route path="/posts/ai-security-c2" element={<AISecurityC2 />} />
       <Route path="/posts/opencode-architecture" element={<OpenCodeArchitecture />} />
+      <Route path="/posts/china-cybersecurity-industry-2026" element={<ChinaCybersecurityIndustry2026 />} />
     </Routes>
   );
 }

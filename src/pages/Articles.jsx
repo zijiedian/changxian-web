@@ -5,6 +5,18 @@ import SiteHeader from '../components/SiteHeader.jsx';
 
 const ARTICLES = [
   {
+    id: 'china-cybersecurity-industry-2026',
+    title: '中国网络安全行业全景：领域、岗位与技术能力地图（2026）',
+    desc: '深度调研中国网络安全赛道、就业岗位与技术栈，并附 SVG 思维导图。',
+    date: '2026-02-28',
+    category: '行业研究',
+    channel: 'AI安全',
+    tags: ['网络安全', '就业', '数据安全', '云安全', 'AI安全'],
+    read: '18 分钟',
+    preset: 'china-cybersecurity-industry-2026',
+    url: '/posts/china-cybersecurity-industry-2026',
+  },
+  {
     id: 'opencode-architecture',
     title: 'OpenCode 项目拆解：Agent Code 架构设计全景',
     desc: '基于 dev 分支源码，拆解技术栈、目录、执行循环、权限系统与前后端边界。',
