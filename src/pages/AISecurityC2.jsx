@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { toPng } from 'html-to-image';
+import SiteFooter from '../components/SiteFooter.jsx';
+import SiteHeader from '../components/SiteHeader.jsx';
 
 const cards = [
   {
@@ -65,6 +67,51 @@ const cards = [
     meta: '关于我们',
     title: '尝鲜AI',
     subtitle: '',
+  },
+];
+
+const MOBILE_FRAMEWORK_COMPARISON = [
+  {
+    name: 'Sliver',
+    arch: 'Go 实现，现代 Teamserver + Implant',
+    console: 'CLI',
+    advantage: '跨平台、协议灵活、社区活跃',
+    updated: '2026-02-25',
+  },
+  {
+    name: 'Mythic',
+    arch: '容器化微服务，插件化 Agent/Profile',
+    console: 'Web UI + API',
+    advantage: '扩展性强，适合多人协同',
+    updated: '2026-02-19',
+  },
+  {
+    name: 'Empire',
+    arch: 'PowerShell/.NET 生态，后渗透导向',
+    console: 'CLI/API',
+    advantage: 'Windows/AD 场景经验沉淀深',
+    updated: '2026-02-25',
+  },
+  {
+    name: 'Metasploit',
+    arch: '通用渗透框架，C2 是其一部分',
+    console: 'Console/脚本化',
+    advantage: '模块数量和通用性高',
+    updated: '2026-02-26',
+  },
+  {
+    name: 'AdaptixC2',
+    arch: '高度模块化红队框架',
+    console: 'Web UI + CLI',
+    advantage: '监听器/Agent 扩展能力强',
+    updated: '2026-02-26',
+  },
+  {
+    name: 'CALDERA',
+    arch: '对抗模拟平台，偏 TTP 编排',
+    console: 'Web UI',
+    advantage: '自动化演练与复盘能力强',
+    updated: '2026-02-26',
   },
 ];
 
@@ -500,174 +547,180 @@ export default function AISecurityC2() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f2efe9] text-[#1a1a1a]">
-      <div className="mx-auto max-w-5xl px-4 pb-16 pt-6">
-        <section>
-          <div
-            ref={trackRef}
-            className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 select-none cursor-grab active:cursor-grabbing"
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerLeave={handlePointerUp}
-          >
-            {cards.map((card) => {
-              const dark = !!card.dark;
-              const isCta = card.type === 'cta';
-              return (
-                <div
-                  key={card.id}
-                  className="snap-start"
-                  style={{ width: `${cardWidth}px`, height: `${cardHeight}px`, flex: `0 0 ${cardWidth}px` }}
-                >
-                  <article
-                    data-card
-                    className={`relative h-[800px] w-[600px] overflow-hidden border shadow-poster ${
-                      dark ? 'bg-[#121212] text-[#f2efe9] border-white/20' : 'bg-[#f2efe9] text-[#1a1a1a] border-black/10'
-                    }`}
-                    style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
+    <div className="min-h-screen flex flex-col text-ink">
+      <div className="relative flex-1 overflow-hidden">
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
+        <div className="mx-auto max-w-5xl px-3 pb-12 pt-5 sm:px-4 sm:pb-16 sm:pt-6">
+          <SiteHeader active="articles" />
+
+          <section className="mt-8">
+            <div
+              ref={trackRef}
+              className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+            >
+              {cards.map((card) => {
+                const dark = !!card.dark;
+                const isCta = card.type === 'cta';
+                return (
+                  <div
+                    key={card.id}
+                    className="snap-start"
+                    style={{ width: `${cardWidth}px`, height: `${cardHeight}px`, flex: `0 0 ${cardWidth}px` }}
                   >
-                    <div
-                      className={`pointer-events-none absolute inset-0 opacity-70 ${
-                        dark
-                          ? 'bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]'
-                          : 'bg-[linear-gradient(rgba(0,0,0,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.06)_1px,transparent_1px)]'
+                    <article
+                      data-card
+                      className={`relative h-[800px] w-[600px] overflow-hidden border shadow-poster ${
+                        dark ? 'bg-[#121212] text-[#f2efe9] border-white/20' : 'bg-[#f2efe9] text-[#1a1a1a] border-black/10'
                       }`}
-                      style={{ backgroundSize: '26px 26px' }}
-                    />
-                    <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-brand/20 blur-3xl" />
-                    <div className="pointer-events-none absolute bottom-6 left-8 h-1.5 w-24 bg-brand" />
-                    {card.type === 'cover' && (
-                      <>
-                        <img
-                          src={logoUrl}
-                          alt="尝鲜AI Logo"
-                          className="pointer-events-none absolute right-10 top-36 h-40 w-40 rounded-full border border-black/10 opacity-20"
-                        />
-                        <div className="pointer-events-none absolute right-4 top-24 font-display text-[120px] leading-none text-black/10">
-                          C2
-                        </div>
-                        <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
-                          SECURITY
-                        </div>
-                      </>
-                    )}
-                    <div
-                      className={`pointer-events-none absolute inset-6 border ${
-                        dark ? 'border-white/20' : 'border-black/10'
-                      }`}
-                    />
-
-                    <div className="relative z-10 grid h-full grid-rows-[auto_1fr_auto] gap-4 px-10 py-10">
-                      <div>
-                        {card.type === 'cover' && (
-                          <div className="mb-4 flex items-center gap-3">
-                            <img src={logoUrl} alt="尝鲜AI Logo" className="h-10 w-10 rounded-full border border-black/10" />
-                            <div>
-                              <div className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-dark">尝鲜AI</div>
-                              <div className="text-[10px] uppercase tracking-[0.2em] text-black/60">科技日报</div>
-                            </div>
-                          </div>
-                        )}
-                        <p
-                          className={`font-display text-xs uppercase tracking-widest ${
-                            dark ? 'text-[#f2efe9]/70' : 'text-black/60'
-                          } ${isCta ? 'text-center' : ''}`}
-                        >
-                          {card.meta}
-                        </p>
-                        {card.type === 'cover' ? (
-                          <>
-                            <h1 className="mt-2 font-serif text-[56px] leading-[1.02] tracking-wide">{card.title}</h1>
-                            <p className={`mt-3 text-lg font-medium ${dark ? 'text-[#f2efe9]/80' : 'text-black/80'}`}>
-                              {card.subtitle}
-                            </p>
-                            <span className="mt-4 inline-flex items-center border border-brand/30 bg-brand/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-dark">
-                              AI 安全专题
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <h2 className={`mt-2 font-serif text-[30px] ${isCta ? 'text-center' : ''}`}>{card.title}</h2>
-                            {card.subtitle ? (
-                              <span
-                                className={`mt-2 inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-widest ${
-                                  isCta
-                                    ? dark
-                                      ? 'border border-white/20 bg-white/10 text-[#f2efe9]/70'
-                                      : 'border border-black/10 bg-white/70 text-black/60'
-                                    : dark
-                                      ? 'bg-[#f2efe9] text-[#121212]'
-                                      : 'bg-brand text-white'
-                                } ${isCta ? 'mx-auto' : ''}`}
-                              >
-                                {card.subtitle}
-                              </span>
-                            ) : null}
-                          </>
-                        )}
-                      </div>
-
-                      <div>{renderBody(card)}</div>
-
-                      <div className={`flex justify-between text-xs ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
-                        <span>Card {card.id}</span>
-                        <span className="flex items-center gap-2">
-                          <img src={logoUrl} alt="尝鲜AI Logo" className="h-4 w-4 rounded-full border border-black/10" />
-                          <span>尝鲜AI · 科技日报</span>
-                        </span>
-                      </div>
-                    </div>
-
-                    <div
-                      className={`absolute right-8 top-8 font-display text-xs tracking-[0.4em] ${
-                        dark ? 'text-[#f2efe9]/70' : 'text-black/60'
-                      }`}
+                      style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
                     >
-                      NO.{card.id}
-                    </div>
-                  </article>
-                </div>
-              );
-            })}
-          </div>
+                      <div
+                        className={`pointer-events-none absolute inset-0 opacity-70 ${
+                          dark
+                            ? 'bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]'
+                            : 'bg-[linear-gradient(rgba(0,0,0,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.06)_1px,transparent_1px)]'
+                        }`}
+                        style={{ backgroundSize: '26px 26px' }}
+                      />
+                      <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-brand/20 blur-3xl" />
+                      <div className="pointer-events-none absolute bottom-6 left-8 h-1.5 w-24 bg-brand" />
+                      {card.type === 'cover' && (
+                        <>
+                          <img
+                            src={logoUrl}
+                            alt="尝鲜AI Logo"
+                            className="pointer-events-none absolute right-10 top-36 h-40 w-40 rounded-full border border-black/10 opacity-20"
+                          />
+                          <div className="pointer-events-none absolute right-4 top-24 font-display text-[120px] leading-none text-black/10">
+                            C2
+                          </div>
+                          <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
+                            SECURITY
+                          </div>
+                        </>
+                      )}
+                      <div
+                        className={`pointer-events-none absolute inset-6 border ${
+                          dark ? 'border-white/20' : 'border-black/10'
+                        }`}
+                      />
 
-          <div className="mt-2 flex justify-center">
-            <div className="flex items-center gap-2 rounded-full border border-black/10 bg-[#f2efe9]/90 px-3 py-2 shadow-soft">
-              {cards.map((card, index) => (
-                <span
-                  key={card.id}
-                  ref={(el) => {
-                    dotRefs.current[index] = el;
-                  }}
-                  className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-brand' : 'bg-black/20'}`}
-                />
-              ))}
+                      <div className="relative z-10 grid h-full grid-rows-[auto_1fr_auto] gap-4 px-10 py-10">
+                        <div>
+                          {card.type === 'cover' && (
+                            <div className="mb-4 flex items-center gap-3">
+                              <img src={logoUrl} alt="尝鲜AI Logo" className="h-10 w-10 rounded-full border border-black/10" />
+                              <div>
+                                <div className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-dark">尝鲜AI</div>
+                                <div className="text-[10px] uppercase tracking-[0.2em] text-black/60">科技日报</div>
+                              </div>
+                            </div>
+                          )}
+                          <p
+                            className={`font-display text-xs uppercase tracking-widest ${
+                              dark ? 'text-[#f2efe9]/70' : 'text-black/60'
+                            } ${isCta ? 'text-center' : ''}`}
+                          >
+                            {card.meta}
+                          </p>
+                          {card.type === 'cover' ? (
+                            <>
+                              <h1 className="mt-2 font-serif text-[56px] leading-[1.02] tracking-wide">{card.title}</h1>
+                              <p className={`mt-3 text-lg font-medium ${dark ? 'text-[#f2efe9]/80' : 'text-black/80'}`}>
+                                {card.subtitle}
+                              </p>
+                              <span className="mt-4 inline-flex items-center border border-brand/30 bg-brand/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-dark">
+                                AI 安全专题
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <h2 className={`mt-2 font-serif text-[30px] ${isCta ? 'text-center' : ''}`}>{card.title}</h2>
+                              {card.subtitle ? (
+                                <span
+                                  className={`mt-2 inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-widest ${
+                                    isCta
+                                      ? dark
+                                        ? 'border border-white/20 bg-white/10 text-[#f2efe9]/70'
+                                        : 'border border-black/10 bg-white/70 text-black/60'
+                                      : dark
+                                        ? 'bg-[#f2efe9] text-[#121212]'
+                                        : 'bg-brand text-white'
+                                  } ${isCta ? 'mx-auto' : ''}`}
+                                >
+                                  {card.subtitle}
+                                </span>
+                              ) : null}
+                            </>
+                          )}
+                        </div>
+
+                        <div>{renderBody(card)}</div>
+
+                        <div className={`flex justify-between text-xs ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
+                          <span>Card {card.id}</span>
+                          <span className="flex items-center gap-2">
+                            <img src={logoUrl} alt="尝鲜AI Logo" className="h-4 w-4 rounded-full border border-black/10" />
+                            <span>尝鲜AI · 科技日报</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`absolute right-8 top-8 font-display text-xs tracking-[0.4em] ${
+                          dark ? 'text-[#f2efe9]/70' : 'text-black/60'
+                        }`}
+                      >
+                        NO.{card.id}
+                      </div>
+                    </article>
+                  </div>
+                );
+              })}
             </div>
-          </div>
 
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-xs font-semibold text-brand-dark"
-            >
-              一键复制文章内容
-            </button>
-            <button
-              type="button"
-              onClick={handleExport}
-              className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold text-ink"
-            >
-              {exporting ? '正在导出…' : '一键导出卡片图片'}
-            </button>
-            {(copyStatus || exportStatus) && (
-              <span className="text-xs text-muted">{copyStatus || exportStatus}</span>
-            )}
-          </div>
-        </section>
+            <div className="mt-2 flex justify-center">
+              <div className="glass-card flex items-center gap-2 rounded-full px-3 py-2">
+                {cards.map((card, index) => (
+                  <span
+                    key={card.id}
+                    ref={(el) => {
+                      dotRefs.current[index] = el;
+                    }}
+                    className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-brand' : 'bg-black/20'}`}
+                  />
+                ))}
+              </div>
+            </div>
+            <p className="mt-2 text-center text-xs text-muted sm:hidden">左右滑动查看卡片</p>
 
-        <article className="mt-10 rounded-3xl border border-black/10 bg-white p-6 shadow-soft">
+            <div className="mt-3 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="w-full soft-button soft-button-primary sm:w-auto"
+              >
+                一键复制文章内容
+              </button>
+              <button
+                type="button"
+                onClick={handleExport}
+                className="w-full soft-button soft-button-secondary sm:w-auto"
+              >
+                {exporting ? '正在导出…' : '一键导出卡片图片'}
+              </button>
+              {(copyStatus || exportStatus) && (
+                <span className="text-xs text-muted">{copyStatus || exportStatus}</span>
+              )}
+            </div>
+          </section>
+
+        <article className="mt-8 glass-card rounded-3xl p-4 sm:mt-10 sm:p-6">
           <header className="border-b border-black/10 pb-6">
             <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-brand-dark">
               <span className="rounded-full border border-brand/30 bg-brand/10 px-3 py-1 font-semibold">AI安全</span>
@@ -675,7 +728,7 @@ export default function AISecurityC2() {
               <span className="text-black/40">·</span>
               <span>2026-02-27</span>
             </div>
-            <h1 className="mt-3 font-serif text-3xl text-ink">开源与闭源 C2 框架全景：生态、能力与安全治理</h1>
+            <h1 className="mt-3 font-serif text-2xl leading-tight text-ink sm:text-3xl">开源与闭源 C2 框架全景：生态、能力与<span className="theme-gradient-text">安全治理</span></h1>
             <p className="mt-3 text-sm text-muted">
               本文从安全视角梳理市场上主流 C2 框架，覆盖开源与闭源阵营，并提供可理解的对比维度与治理建议。
               内容仅用于防守研究与合规演练。
@@ -697,14 +750,19 @@ export default function AISecurityC2() {
             </div>
           </header>
 
-          <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
-            <section className="space-y-6 text-sm text-muted">
-              <div className="rounded-2xl border border-black/10 bg-[#f2efe9] p-4">
+          <div className="mt-5 grid gap-5 sm:mt-6 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+            <section className="space-y-5 text-[13px] leading-6 text-muted sm:space-y-6 sm:text-sm sm:leading-7 [overflow-wrap:anywhere] [&_h2]:text-[15px] sm:[&_h2]:text-base [&_a]:break-all">
+              <div className="glass-card rounded-2xl p-4">
                 <h2 className="text-sm font-semibold uppercase tracking-widest text-black/60">导读</h2>
                 <p className="mt-2 text-sm text-black/70">
                   C2 框架是红队对抗的核心组件，同时也是防守侧要重点监控的能力链。本文从生态与治理视角解读开源与闭源阵营的差异，
                   供安全团队进行风险评估与演练规划。
                 </p>
+                <ul className="mt-3 grid gap-2 text-xs text-black/70 sm:hidden">
+                  <li className="rounded-xl border border-black/10 bg-black/[0.02] px-3 py-2">重点 1：开源与闭源并行，适配不同团队治理模型。</li>
+                  <li className="rounded-xl border border-black/10 bg-black/[0.02] px-3 py-2">重点 2：优先关注可观测性、审计与合规边界。</li>
+                  <li className="rounded-xl border border-black/10 bg-black/[0.02] px-3 py-2">重点 3：通过红蓝演练验证响应与流程能力。</li>
+                </ul>
               </div>
 
               <div id="c2-1">
@@ -716,82 +774,82 @@ export default function AISecurityC2() {
 
               <div id="c2-2">
                 <h2 className="text-base font-semibold text-ink">2. 开源代表与最新状态（含 GitHub）</h2>
-                <ul className="mt-2 space-y-3">
+                <ul className="mt-2 space-y-3 [&_a]:mt-1 [&_a]:block [&_a]:text-brand sm:[&_a]:ml-2 sm:[&_a]:mt-0 sm:[&_a]:inline">
                   <li>
                     • Sliver：Go 生态、跨平台、以 CLI 协作和多协议通信见长（最近更新：2026-02-25）。
-                    <a href="https://github.com/BishopFox/sliver" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/BishopFox/sliver" target="_blank" rel="noreferrer">
                       github.com/BishopFox/sliver
                     </a>
                   </li>
                   <li>
                     • Mythic：容器化微服务架构，Agent 与 C2 Profile 插件化能力强（最近更新：2026-02-19）。
-                    <a href="https://github.com/its-a-feature/Mythic" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/its-a-feature/Mythic" target="_blank" rel="noreferrer">
                       github.com/its-a-feature/Mythic
                     </a>
                   </li>
                   <li>
                     • Havoc：Teamserver + Client 双端形态，适合图形化协作（最近更新：2025-12-18，仓库已 Archived）。
-                    <a href="https://github.com/HavocFramework/Havoc" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/HavocFramework/Havoc" target="_blank" rel="noreferrer">
                       github.com/HavocFramework/Havoc
                     </a>
                   </li>
                   <li>
                     • Covenant：.NET 生态协作式 C2，任务管理和操作流较完整（最近更新：2024-07-18）。
-                    <a href="https://github.com/cobbr/Covenant" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/cobbr/Covenant" target="_blank" rel="noreferrer">
                       github.com/cobbr/Covenant
                     </a>
                   </li>
                   <li>
                     • Merlin：Go 实现，强调 HTTP/2、QUIC 等多协议与可移植性（最近更新：2025-04-17）。
-                    <a href="https://github.com/Ne0nd0g/merlin" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/Ne0nd0g/merlin" target="_blank" rel="noreferrer">
                       github.com/Ne0nd0g/merlin
                     </a>
                   </li>
                   <li>
                     • Empire：经典开源框架，PowerShell/.NET 模块生态成熟（最近更新：2026-02-25）。
-                    <a href="https://github.com/BC-SECURITY/Empire" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/BC-SECURITY/Empire" target="_blank" rel="noreferrer">
                       github.com/BC-SECURITY/Empire
                     </a>
                   </li>
                   <li>
                     • PoshC2：强调团队流程与任务协作的 PowerShell C2（最近更新：2025-11-20）。
-                    <a href="https://github.com/nettitude/PoshC2" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/nettitude/PoshC2" target="_blank" rel="noreferrer">
                       github.com/nettitude/PoshC2
                     </a>
                   </li>
                   <li>
                     • CALDERA：偏“演练平台”定位，强于 TTP 编排与自动化（最近更新：2026-02-26）。
-                    <a href="https://github.com/mitre/caldera" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/mitre/caldera" target="_blank" rel="noreferrer">
                       github.com/mitre/caldera
                     </a>
                   </li>
                   <li>
                     • Metasploit：模块生态最广的通用框架，Meterpreter 提供稳定 C2 能力（最近更新：2026-02-26）。
-                    <a href="https://github.com/rapid7/metasploit-framework" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/rapid7/metasploit-framework" target="_blank" rel="noreferrer">
                       github.com/rapid7/metasploit-framework
                     </a>
                   </li>
                   <li>
                     • AdaptixC2：高度模块化红队工具链，强调可扩展 Listener/Agent 生态（最近更新：2026-02-26）。
-                    <a href="https://github.com/Adaptix-Framework/AdaptixC2" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/Adaptix-Framework/AdaptixC2" target="_blank" rel="noreferrer">
                       github.com/Adaptix-Framework/AdaptixC2
                     </a>
                   </li>
                   <li>
                     • IoM / Malefic：围绕 IoM Implant 体系构建的 C2 框架，偏向现代化基础设施设计（最近更新：2026-01-15）。
-                    <a href="https://github.com/chainreactors/malefic" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/chainreactors/malefic" target="_blank" rel="noreferrer">
                       github.com/chainreactors/malefic
                     </a>
                   </li>
                   <li>
                     • BYOB：大型开源后渗透框架，支持模块化 Botnet/C2 管理（最近更新：2026-02-20）。
-                    <a href="https://github.com/malwaredllc/byob" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/malwaredllc/byob" target="_blank" rel="noreferrer">
                       github.com/malwaredllc/byob
                     </a>
                   </li>
                   <li>
                     • Koadic：COM C2 思路，偏轻量研究与实验场景（社区仓库最近更新：2022-01-03）。
-                    <a href="https://github.com/offsecginger/koadic" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/offsecginger/koadic" target="_blank" rel="noreferrer">
                       github.com/offsecginger/koadic
                     </a>
                   </li>
@@ -800,102 +858,102 @@ export default function AISecurityC2() {
                   </li>
                   <li>
                     • Viper：可视化协同平台，偏向多人团队任务分工（最近更新：2026-01-18）。
-                    <a href="https://github.com/FunnyWolf/Viper" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/FunnyWolf/Viper" target="_blank" rel="noreferrer">
                       github.com/FunnyWolf/Viper
                     </a>
                   </li>
                   <li>
                     • XiebroC2：Implant 开源，但 Teamserver/Controller 未开源（最近更新：2025-02-28，部分开源）。
-                    <a href="https://github.com/INotGreen/XiebroC2" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/INotGreen/XiebroC2" target="_blank" rel="noreferrer">
                       github.com/INotGreen/XiebroC2
                     </a>
                   </li>
                   <li>
                     • Supershell：基于反向 SSH 的 C2 平台，部署简洁（最近更新：2023-09-26）。
-                    <a href="https://github.com/tdragon6/Supershell" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/tdragon6/Supershell" target="_blank" rel="noreferrer">
                       github.com/tdragon6/Supershell
                     </a>
                   </li>
                   <li>
                     • DeimosC2：多平台开源 C2，面向团队协同与扩展（最近更新：2025-04-17）。
-                    <a href="https://github.com/DeimosC2/DeimosC2" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/DeimosC2/DeimosC2" target="_blank" rel="noreferrer">
                       github.com/DeimosC2/DeimosC2
                     </a>
                   </li>
                   <li>
                     • SHAD0W：后渗透导向框架，偏研究与定制化实验（最近更新：2021-09-29）。
-                    <a href="https://github.com/bats3c/shad0w" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/bats3c/shad0w" target="_blank" rel="noreferrer">
                       github.com/bats3c/shad0w
                     </a>
                   </li>
                   <li>
                     • SILENTTRINITY：模块化 C2，适合脚本化二次开发（最近更新：2023-12-06）。
-                    <a href="https://github.com/byt3bl33d3r/SILENTTRINITY" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/byt3bl33d3r/SILENTTRINITY" target="_blank" rel="noreferrer">
                       github.com/byt3bl33d3r/SILENTTRINITY
                     </a>
                   </li>
                   <li>
                     • C3：多通道实验型 C2 框架，适合研究型自定义通道开发（最近更新：2026-01-16）。
-                    <a href="https://github.com/ReversecLabs/C3" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/ReversecLabs/C3" target="_blank" rel="noreferrer">
                       github.com/ReversecLabs/C3
                     </a>
                   </li>
                   <li>
                     • Ninja：轻量化 C2，常见于实验与教学场景（最近更新：2022-09-26）。
-                    <a href="https://github.com/ahmedkhlief/Ninja" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/ahmedkhlief/Ninja" target="_blank" rel="noreferrer">
                       github.com/ahmedkhlief/Ninja
                     </a>
                   </li>
                   <li>
                     • Manjusaka：多语言开源 C2，提供 Teamserver 与图形管理端（最近更新：2026-01-14）。
-                    <a href="https://github.com/YDHCUI/manjusaka" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/YDHCUI/manjusaka" target="_blank" rel="noreferrer">
                       github.com/YDHCUI/manjusaka
                     </a>
                   </li>
                   <li>
                     • Pupy（历史大型项目）：跨平台开源 C2（最近更新：2024-03-22，仓库为 Archived 状态）。
-                    <a href="https://github.com/n1nj4sec/pupy" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/n1nj4sec/pupy" target="_blank" rel="noreferrer">
                       github.com/n1nj4sec/pupy
                     </a>
                   </li>
                   <li>
                     • NimPlant：基于 Nim 的现代化开源 C2（最近更新：2025-03-28）。
-                    <a href="https://github.com/chvancooten/NimPlant" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/chvancooten/NimPlant" target="_blank" rel="noreferrer">
                       github.com/chvancooten/NimPlant
                     </a>
                   </li>
                   <li>
                     • Villain：会话统一与中继导向框架，适合横向阶段会话编排（最近更新：2025-05-21）。
-                    <a href="https://github.com/t3l3machus/Villain" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/t3l3machus/Villain" target="_blank" rel="noreferrer">
                       github.com/t3l3machus/Villain
                     </a>
                   </li>
                   <li>
                     • Pyramid：Python C2 组合框架，强调可组合性与脚本化（最近更新：2024-12-02）。
-                    <a href="https://github.com/naksyn/Pyramid" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/naksyn/Pyramid" target="_blank" rel="noreferrer">
                       github.com/naksyn/Pyramid
                     </a>
                   </li>
                   <li>
                     • Nimbo-C2：轻量但活跃的开源 C2，适合快速验证场景（最近更新：2026-01-29）。
-                    <a href="https://github.com/itaymigdal/Nimbo-C2" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/itaymigdal/Nimbo-C2" target="_blank" rel="noreferrer">
                       github.com/itaymigdal/Nimbo-C2
                     </a>
                   </li>
                   <li>
                     • Quasar（历史大型项目）：经典开源 RAT/C2（最近更新：2024-02-29，仓库为 Archived 状态）。
-                    <a href="https://github.com/quasar/Quasar" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/quasar/Quasar" target="_blank" rel="noreferrer">
                       github.com/quasar/Quasar
                     </a>
                   </li>
                   <li>
                     • AsyncRAT-C-Sharp：开源 RAT/C2 项目，常用于样本分析与检测研究（最近更新：2023-10-16）。
-                    <a href="https://github.com/NYAN-x-CAT/AsyncRAT-C-Sharp" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://github.com/NYAN-x-CAT/AsyncRAT-C-Sharp" target="_blank" rel="noreferrer">
                       github.com/NYAN-x-CAT/AsyncRAT-C-Sharp
                     </a>
                   </li>
                 </ul>
-                <div className="mt-4 rounded-2xl border border-black/10 bg-[#f2efe9] p-4 text-xs text-black/70">
+                <div className="mt-4 glass-card rounded-2xl p-4 text-xs text-black/70">
                   <p className="font-semibold text-black/80">更新时间说明（核验日期：2026-02-27）</p>
                   <p className="mt-2">
                     开源项目“最近更新”统一取 GitHub API `pushed_at` 字段，反映仓库最后推送时间，不等同于正式版本发布日期。
@@ -917,40 +975,40 @@ export default function AISecurityC2() {
 
               <div id="c2-3">
                 <h2 className="text-base font-semibold text-ink">3. 闭源代表与优势特征</h2>
-                <ul className="mt-2 space-y-2">
+                <ul className="mt-2 space-y-2 [&_a]:mt-1 [&_a]:block [&_a]:text-brand sm:[&_a]:ml-2 sm:[&_a]:mt-0 sm:[&_a]:inline">
                   <li>
                     • Cobalt Strike：成熟商业产品，生态完善、企业红队常用（最近公开状态核验：2026-02-27）。
-                    <a href="https://www.cobaltstrike.com/" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://www.cobaltstrike.com/" target="_blank" rel="noreferrer">
                       cobaltstrike.com
                     </a>
                   </li>
                   <li>
                     • Brute Ratel C4：新锐商业产品，强调对抗模拟与稳定支持（最近公开状态核验：2026-02-27）。
-                    <a href="https://bruteratel.com/" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://bruteratel.com/" target="_blank" rel="noreferrer">
                       bruteratel.com
                     </a>
                   </li>
                   <li>
                     • Nighthawk：商业红队平台，强调协作与企业支持（最近公开状态核验：2026-02-27）。
-                    <a href="https://www.mdsec.co.uk/nighthawk/" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://www.mdsec.co.uk/nighthawk/" target="_blank" rel="noreferrer">
                       mdsec.co.uk/nighthawk
                     </a>
                   </li>
                   <li>
                     • Outflank C2：商业对抗平台，面向红队与防守演练（最近公开状态核验：2026-02-27）。
-                    <a href="https://outflank.nl/outflank-c2/" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://outflank.nl/outflank-c2/" target="_blank" rel="noreferrer">
                       outflank.nl/outflank-c2
                     </a>
                   </li>
                   <li>
                     • Core Impact：商业渗透测试平台，具备代理、横向与攻击链编排能力（最近公开状态核验：2026-02-27）。
-                    <a href="https://www.coresecurity.com/products/core-impact" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://www.coresecurity.com/products/core-impact" target="_blank" rel="noreferrer">
                       coresecurity.com/products/core-impact
                     </a>
                   </li>
                   <li>
                     • Metasploit Pro：Rapid7 商业化平台版本（最近公开状态核验：2026-02-27）。
-                    <a href="https://www.rapid7.com/products/metasploit/" target="_blank" rel="noreferrer" className="ml-2 text-brand">
+                    <a href="https://www.rapid7.com/products/metasploit/" target="_blank" rel="noreferrer">
                       rapid7.com/products/metasploit
                     </a>
                   </li>
@@ -973,8 +1031,21 @@ export default function AISecurityC2() {
                   <li>• 维护活跃度：看 GitHub 最近更新时间、Issue/PR 活跃度、是否 Archived，以评估持续可用性。</li>
                   <li>• 治理与合规：闭源产品通常支持商业服务与合规流程；开源更灵活，但需自建治理体系。</li>
                 </ul>
-                <div className="mt-4 rounded-2xl border border-black/10 bg-white p-3">
-                  <div className="overflow-x-auto">
+                <div className="mt-4 glass-card rounded-2xl p-3">
+                  <div className="space-y-2 sm:hidden">
+                    {MOBILE_FRAMEWORK_COMPARISON.map((row) => (
+                      <article key={row.name} className="rounded-xl border border-black/10 bg-white/75 p-3 text-xs">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-semibold text-ink">{row.name}</span>
+                          <span className="text-black/50">{row.updated}</span>
+                        </div>
+                        <div className="mt-1 text-black/60">定位：{row.arch}</div>
+                        <div className="mt-1 text-black/60">控制端：{row.console}</div>
+                        <div className="mt-1 text-black/60">优势：{row.advantage}</div>
+                      </article>
+                    ))}
+                  </div>
+                  <div className="hidden overflow-x-auto pb-1 sm:block">
                     <table className="min-w-[920px] w-full border-separate border-spacing-0 text-xs">
                       <thead>
                         <tr className="bg-[#f2efe9] text-left text-[11px] uppercase tracking-widest text-black/60">
@@ -1076,93 +1147,93 @@ export default function AISecurityC2() {
                   以下截图来自公开资料，用于展示不同阵营的典型界面形态。新增了 AdaptixC2、IoM（Malefic）等开源项目，以及 Outflank/Core Impact/Metasploit 等闭源产品页面快照。
                 </p>
                 <div className="mt-4 grid gap-6">
-                  <div className="rounded-2xl border border-black/10 bg-white p-4">
+                  <div className="glass-card rounded-2xl p-4">
                     <h3 className="text-sm font-semibold text-ink">开源代表</h3>
                     <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/covenant-ui.png" alt="Covenant UI 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/covenant-ui.png" alt="Covenant UI 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Covenant UI</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/havoc-ui.png" alt="Havoc UI 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/havoc-ui.png" alt="Havoc UI 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Havoc UI</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/havoc-session-graph.jpg" alt="Havoc Session Graph 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/havoc-session-graph.jpg" alt="Havoc Session Graph 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Havoc Session Graph</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/havoc-multi-agent.png" alt="Havoc Multi User Agent Control 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/havoc-multi-agent.png" alt="Havoc Multi User Agent Control 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Havoc Multi-User Control</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/havoc-console-help.png" alt="Havoc Session Console Help 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/havoc-console-help.png" alt="Havoc Session Console Help 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Havoc Console Help</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/havoc-agent-select.png" alt="Havoc Agent Select 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/havoc-agent-select.png" alt="Havoc Agent Select 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Havoc Agent Select</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/havoc-default.png" alt="Havoc Default 界面截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/havoc-default.png" alt="Havoc Default 界面截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Havoc Default</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/empire-ui.jpg" alt="Empire UI 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/empire-ui.jpg" alt="Empire UI 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Empire UI</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/empire-ui-alt.jpg" alt="Empire UI 视觉截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/empire-ui-alt.jpg" alt="Empire UI 视觉截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Empire UI（补充）</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/adaptixc2-ogp.png" alt="AdaptixC2 仓库卡片图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/adaptixc2-ogp.png" alt="AdaptixC2 仓库卡片图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">AdaptixC2（GitHub 卡片）</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/malefic-ogp.png" alt="Malefic IoM 仓库卡片图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/malefic-ogp.png" alt="Malefic IoM 仓库卡片图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">IoM / Malefic（GitHub 卡片）</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/byob-ogp.png" alt="BYOB 仓库卡片图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/byob-ogp.png" alt="BYOB 仓库卡片图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">BYOB（GitHub 卡片）</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/nimboc2-ogp.png" alt="Nimbo-C2 仓库卡片图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/nimboc2-ogp.png" alt="Nimbo-C2 仓库卡片图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Nimbo-C2（GitHub 卡片）</figcaption>
                       </figure>
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-black/10 bg-white p-4">
+                  <div className="glass-card rounded-2xl p-4">
                     <h3 className="text-sm font-semibold text-ink">闭源代表</h3>
                     <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/cobalt-strike.png" alt="Cobalt Strike UI 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/cobalt-strike.png" alt="Cobalt Strike UI 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Cobalt Strike UI</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/brute-ratel.png" alt="Brute Ratel UI 截图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/brute-ratel.png" alt="Brute Ratel UI 截图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Brute Ratel UI</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/nighthawk-ogp.png" alt="Nighthawk C2 视觉图" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/nighthawk-ogp.png" alt="Nighthawk C2 视觉图" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Nighthawk C2 视觉图</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/metasploit-page.gif" alt="Metasploit 官方页面快照" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/metasploit-page.gif" alt="Metasploit 官方页面快照" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Metasploit（官网页面快照）</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/outflank-c2-page.gif" alt="Outflank C2 官方页面快照" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/outflank-c2-page.gif" alt="Outflank C2 官方页面快照" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Outflank C2（官网页面快照）</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/core-impact-page.gif" alt="Core Impact 官方页面快照" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/core-impact-page.gif" alt="Core Impact 官方页面快照" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Core Impact（官网页面快照）</figcaption>
                       </figure>
-                      <figure className="rounded-2xl border border-black/10 bg-white p-3">
-                        <img src="/assets/c2/cobaltstrike-page.gif" alt="Cobalt Strike 官方页面快照" className="w-full rounded-xl" />
+                      <figure className="glass-card rounded-2xl p-3">
+                        <img src="/assets/c2/cobaltstrike-page.gif" alt="Cobalt Strike 官方页面快照" loading="lazy" className="h-44 w-full rounded-xl bg-white object-contain sm:h-auto" />
                         <figcaption className="mt-2 text-xs text-muted">Cobalt Strike（官网页面快照）</figcaption>
                       </figure>
                     </div>
@@ -1185,13 +1256,25 @@ export default function AISecurityC2() {
                   </div>
                 )}
                 {!lolc2Error && !lolc2Data && (
-                  <div className="mt-3 rounded-2xl border border-gray-200 bg-white px-3 py-2 text-xs text-muted">
+                  <div className="mt-3 glass-card rounded-2xl px-3 py-2 text-xs text-muted">
                     正在加载 LoLC2 清单...
                   </div>
                 )}
                 {lolc2Data && (
-                  <div className="mt-4 rounded-2xl border border-black/10 bg-white p-3">
-                    <div className="overflow-x-auto">
+                  <div className="mt-4 glass-card rounded-2xl p-3">
+                    <div className="space-y-2 sm:hidden">
+                      {lolc2Rows.map((row, index) => (
+                        <article key={row.id || index} className="rounded-xl border border-black/10 bg-white/80 p-3 text-xs">
+                          <div className="text-black/50">通道/分类</div>
+                          <div className="mt-1 font-semibold text-ink">{row.category}</div>
+                          <div className="mt-2 text-black/50">GitHub</div>
+                          <a href={row.githubUrl} target="_blank" rel="noreferrer" className="mt-1 block break-all text-brand">
+                            {row.githubUrl}
+                          </a>
+                        </article>
+                      ))}
+                    </div>
+                    <div className="hidden overflow-x-auto pb-1 sm:block">
                       <table className="min-w-[620px] w-full border-separate border-spacing-0 text-xs">
                         <thead>
                           <tr className="bg-[#f2efe9] text-left text-[11px] uppercase tracking-widest text-black/60">
@@ -1229,9 +1312,9 @@ export default function AISecurityC2() {
               </div>
             </section>
 
-            <aside className="space-y-4">
-              <div className="sticky top-6 space-y-4">
-                <div className="rounded-2xl border border-black/10 bg-white/80 p-4">
+            <aside className="hidden space-y-4 lg:block">
+              <div className="space-y-4 lg:sticky lg:top-6">
+                <div className="glass-card rounded-2xl p-4">
                   <h3 className="text-xs font-semibold uppercase tracking-widest text-black/60">目录</h3>
                   <ul className="mt-3 space-y-2 text-xs text-black/60">
                     <li><a className="transition hover:text-brand" href="#c2-1">01 市场结构</a></li>
@@ -1245,7 +1328,7 @@ export default function AISecurityC2() {
                   </ul>
                 </div>
 
-                <div className="rounded-2xl border border-black/10 bg-[#f2efe9] p-4">
+                <div className="glass-card rounded-2xl p-4">
                   <h3 className="text-xs font-semibold uppercase tracking-widest text-black/60">快速结论</h3>
                   <ul className="mt-3 space-y-2 text-xs text-black/70">
                     <li>• 开源生态决定灵活度。</li>
@@ -1263,6 +1346,7 @@ export default function AISecurityC2() {
             VShell 状态补充参考 NVISO Labs《Inside VShell: Evasive C2 Framework and New Delivery Techniques》（2025）。
           </footer>
         </article>
+        </div>
       </div>
 
       <svg className="pointer-events-none fixed inset-0 z-[1] opacity-[0.06] mix-blend-multiply">
@@ -1272,6 +1356,8 @@ export default function AISecurityC2() {
         </filter>
         <rect width="100%" height="100%" filter="url(#noiseFilter)" />
       </svg>
+
+      <SiteFooter maxWidthClass="max-w-5xl" />
     </div>
   );
 }

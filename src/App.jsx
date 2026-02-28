@@ -9,6 +9,7 @@ import Login from './pages/Login.jsx';
 import Profile from './pages/Profile.jsx';
 import MiniMax2026 from './pages/MiniMax2026.jsx';
 import AISecurityC2 from './pages/AISecurityC2.jsx';
+import PromptNavigator from './pages/PromptNavigator.jsx';
 
 // 登录保护路由组件
 function ProtectedRoute({ children }) {
@@ -24,6 +25,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/generator" element={<Generator />} />
+      <Route path="/prompts" element={<PromptNavigator />} />
       <Route path="/projects/:id" element={<ProjectPreview />} />
       <Route path="/articles" element={<Articles />} />
       <Route path="/about" element={<About />} />

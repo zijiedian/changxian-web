@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import SiteFooter from '../components/SiteFooter.jsx';
+import SiteHeader from '../components/SiteHeader.jsx';
 
 const ARTICLES = [
   {
@@ -41,7 +43,6 @@ const ARTICLES = [
 ];
 
 export default function Articles() {
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
   const [activeCategory, setActiveCategory] = useState('全部');
   const categories = ['全部', 'AI绘画', 'AI编程', 'AI安全'];
   const filteredArticles =
@@ -52,122 +53,39 @@ export default function Articles() {
   const rest = filteredArticles.slice(1);
 
   return (
-    <div className="min-h-screen bg-paper text-ink">
+    <div className="min-h-screen text-ink">
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute -top-24 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl" />
         <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 xl:px-10">
-          <header className="rounded-2xl border border-gray-200 bg-white/90 px-4 py-3 shadow-soft backdrop-blur">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-brand/10 p-[2px] ring-1 ring-brand/30 shadow-sm">
-                  <div className="flex h-full w-full items-center justify-center rounded-full bg-brand/15">
-                    <img src="/logo.png" alt="尝鲜AI" className="h-6 w-6 rounded-full object-contain drop-shadow-sm" />
-                  </div>
-                </div>
-                <div className="text-base font-semibold text-ink">尝鲜AI</div>
-              </div>
-            <div className="sm:hidden">
-                <details className="relative">
-                  <summary className="list-none rounded-full border border-gray-200 bg-white p-2 text-ink shadow-soft">
-                    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
-                      <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                    <span className="sr-only">菜单</span>
-                  </summary>
-                  <div className="absolute right-0 mt-2 w-44 rounded-2xl border border-gray-200 bg-white p-2 text-xs shadow-soft">
-                    <Link to="/" className="block rounded-xl px-3 py-2 font-semibold text-ink hover:bg-gray-50">
-                      首页
-                    </Link>
-                    <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
-                      工具库
-                    </div>
-                    <Link to="/generator" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                      图文生成
-                    </Link>
-                    <div className="px-3 py-1 text-[11px] text-muted">更多工具敬请期待</div>
-                    <Link to="/articles" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                      博客
-                    </Link>
-                    <Link to="/about" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                      关于我们
-                    </Link>
-                    {!isLoggedIn && (
-                      <Link to="/login" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                        登录
-                      </Link>
-                    )}
-                    {isLoggedIn && (
-                      <Link to="/profile" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                        个人中心
-                      </Link>
-                    )}
-                  </div>
-                </details>
-              </div>
-              <nav className="hidden flex-wrap items-center gap-3 text-xs font-semibold sm:flex">
-                <Link to="/" className="px-3 py-2 text-muted transition hover:text-ink">
-                  首页
-                </Link>
-                <div className="relative group">
-                  <button type="button" className="px-3 py-2 text-muted transition hover:text-ink">
-                    工具库
-                  </button>
-                  <div className="absolute left-0 top-full z-20 hidden min-w-[160px] rounded-2xl border border-gray-200 bg-white p-2 shadow-soft group-hover:block">
-                    <Link
-                      to="/generator"
-                      className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink transition hover:bg-gray-50"
-                    >
-                      图文生成
-                    </Link>
-                    <div className="px-3 py-2 text-[11px] text-muted">更多工具敬请期待</div>
-                  </div>
-                </div>
-                <Link to="/articles" className="rounded-full bg-brand px-4 py-2 text-white shadow-soft">
-                  博客
-                </Link>
-              <Link to="/about" className="px-3 py-2 text-muted transition hover:text-ink">
-                关于我们
-              </Link>
-              {!isLoggedIn && (
-                <Link to="/login" className="px-3 py-2 text-muted transition hover:text-ink">
-                  登录
-                </Link>
-              )}
-              {isLoggedIn && (
-                <Link to="/profile" className="px-3 py-2 text-muted transition hover:text-ink">
-                  个人中心
-                </Link>
-              )}
-            </nav>
-            </div>
-          </header>
+          <SiteHeader active="articles" />
 
           <section className="mt-12 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 xl:gap-16">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-1 text-xs text-muted shadow-soft">
+              <div className="glass-card inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted">
                 尝鲜AI 博客
               </div>
               <h1 className="mt-4 text-3xl font-semibold leading-tight text-ink sm:text-4xl">
-                AIGC 博客与模型观察
+                AIGC 博客与
+                <span className="theme-gradient-text">模型观察</span>
               </h1>
               <p className="mt-4 text-sm text-muted sm:text-base">
                 这里收录所有深度文章与行业观察，每篇内容都可一键生成图文卡片，便于发布到公众号或社媒渠道。
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                <Link to="/generator" className="rounded-full bg-brand px-5 py-2 text-xs font-semibold text-white shadow-soft">
+                <Link to="/generator" className="soft-button soft-button-primary px-5">
                   去生成图文卡片
                 </Link>
                 <Link
                   to={featured?.url || '/articles'}
-                  className="rounded-full border border-gray-200 bg-white px-5 py-2 text-xs font-semibold text-ink"
+                  className="soft-button soft-button-secondary px-5"
                 >
                   阅读最新博客
                 </Link>
               </div>
             </div>
-            <div className="rounded-3xl bg-gradient-to-br from-brand/25 via-white to-transparent p-[1px] shadow-soft">
-              <div className="rounded-3xl border border-gray-200 bg-white/90 p-6 lg:p-8">
+            <div className="theme-gradient-border rounded-3xl shadow-soft">
+              <div className="glass-card rounded-3xl p-6 lg:p-8">
                 <div className="text-xs font-semibold uppercase tracking-widest text-muted">博客栏目</div>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   {['AI安全', 'AI编程', 'AI绘画', '行业观察'].map((item) => (
@@ -203,7 +121,7 @@ export default function Articles() {
               <h2 className="text-base font-semibold text-ink">分类浏览</h2>
               <p className="mt-1 text-xs text-muted">快速切换 AI 安全、编程与绘画内容。</p>
             </div>
-            <span className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold text-muted">
+            <span className="soft-button soft-button-secondary px-3 py-1 text-muted">
               当前：{activeCategory}
             </span>
           </div>
@@ -232,7 +150,7 @@ export default function Articles() {
               <h2 className="text-xl font-semibold text-ink">精选博客</h2>
               <p className="mt-1 text-sm text-muted">支持生成卡片与阅读全文。</p>
             </div>
-            <span className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold text-muted">
+            <span className="soft-button soft-button-secondary px-3 py-1 text-muted">
               更新日期：2026-02-25
             </span>
           </div>
@@ -245,8 +163,8 @@ export default function Articles() {
               ) : (
                 <>
                   {featured && (
-                    <article className="rounded-3xl bg-gradient-to-br from-brand/20 via-white to-transparent p-[1px] shadow-soft">
-                      <div className="flex min-h-[240px] flex-col justify-between rounded-3xl border border-gray-200 bg-white p-6">
+                    <article className="theme-gradient-border rounded-3xl shadow-soft">
+                      <div className="flex min-h-[240px] flex-col justify-between glass-card rounded-3xl p-6">
                         <div>
                           <div className="text-xs text-muted">
                             {featured.date} · {featured.category}
@@ -284,7 +202,7 @@ export default function Articles() {
                     {rest.map((article) => (
                       <article
                         key={article.id}
-                        className="flex flex-col justify-between rounded-3xl border border-gray-200 bg-white p-5 shadow-soft"
+                        className="flex flex-col justify-between glass-card rounded-3xl p-5"
                       >
                         <div>
                           <div className="text-xs text-muted">
@@ -311,7 +229,7 @@ export default function Articles() {
               )}
             </div>
             <aside className="space-y-4">
-              <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-soft">
+              <div className="glass-card rounded-3xl p-5">
                 <h3 className="text-xs font-semibold uppercase tracking-widest text-muted">快捷入口</h3>
                 <div className="mt-4 grid gap-3 text-xs">
                   <Link to="/generator" className="rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 font-semibold text-ink">
@@ -337,27 +255,7 @@ export default function Articles() {
         </section>
       </div>
 
-      <footer className="border-t border-gray-200 bg-white/80">
-        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 xl:px-10">
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-brand/10 p-[2px] ring-1 ring-brand/30 shadow-sm">
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-brand/15">
-                  <img src="/logo.png" alt="尝鲜AI" className="h-5 w-5 rounded-full object-contain drop-shadow-sm" />
-                </div>
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-ink">尝鲜AI</div>
-                <div className="text-xs text-muted">专注于对 AIGC 行业的观察和分享。</div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-muted">
-            <span>© 2026 子节点科技</span>
-            <span>关注公众号：尝鲜AI</span>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter maxWidthClass="max-w-7xl" />
     </div>
   );
 }

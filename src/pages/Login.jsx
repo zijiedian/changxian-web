@@ -191,7 +191,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-paper text-ink">
+    <div className="min-h-screen text-ink">
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.6),transparent_55%),radial-gradient(circle_at_bottom,rgba(7,193,96,0.22),transparent_60%)]" />
         <div
@@ -218,7 +218,7 @@ export default function Login() {
               </div>
               <h1 className="mt-6 text-3xl font-semibold leading-tight text-ink sm:text-4xl">
                 登录到
-                <span className="text-brand">内容生产工作台</span>
+                <span className="theme-gradient-text">内容生产工作台</span>
               </h1>
               <p className="mt-3 text-sm text-muted sm:text-base">
                 微信扫码或邮箱登录，快速进入你的项目与博客内容。
@@ -300,7 +300,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={handleRetry}
-                    className="mt-6 w-full rounded-full bg-brand px-4 py-2 text-xs font-semibold text-white shadow-soft disabled:opacity-50"
+                    className="mt-6 w-full soft-button soft-button-primary disabled:opacity-50"
                     disabled={loginState === 'loading'}
                   >
                     {loginState === 'loading' ? '加载中...' : '刷新二维码'}
@@ -384,7 +384,7 @@ export default function Login() {
                     )}
                     <button
                       type="submit"
-                      className="w-full rounded-full bg-brand px-4 py-3 text-xs font-semibold text-white shadow-soft disabled:opacity-50"
+                      className="w-full soft-button soft-button-primary py-3 disabled:opacity-50"
                       disabled={emailStatus === 'loading'}
                     >
                       {emailStatus === 'loading'

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { toPng } from 'html-to-image';
 import logoInline from '../assets/logo.png?inline';
+import SiteFooter from '../components/SiteFooter.jsx';
+import SiteHeader from '../components/SiteHeader.jsx';
 
 const cards = [
   {
@@ -791,9 +793,14 @@ export default function Gemini31Pro() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f2efe9] text-[#1a1a1a]">
-      <div className="mx-auto max-w-5xl px-4 pb-16 pt-6">
-        <section>
+    <div className="min-h-screen flex flex-col text-ink">
+      <div className="relative flex-1 overflow-hidden">
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl" />
+        <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
+        <div className="mx-auto max-w-5xl px-4 pb-16 pt-6">
+          <SiteHeader active="articles" />
+
+          <section className="mt-8">
           <div
             ref={trackRef}
             className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 select-none cursor-grab active:cursor-grabbing"
@@ -934,7 +941,7 @@ export default function Gemini31Pro() {
           </div>
 
           <div className="mt-2 flex justify-center">
-            <div className="flex items-center gap-2 rounded-full border border-black/10 bg-[#f2efe9]/90 px-3 py-2 shadow-soft">
+            <div className="glass-card flex items-center gap-2 rounded-full px-3 py-2">
               {cards.map((card, index) => (
                 <span
                   key={card.id}
@@ -951,14 +958,14 @@ export default function Gemini31Pro() {
             <button
               type="button"
               onClick={handleCopy}
-              className="rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-xs font-semibold text-brand-dark"
+              className="soft-button soft-button-primary"
             >
               一键复制文章内容
             </button>
             <button
               type="button"
               onClick={handleExport}
-              className="rounded-full border border-black/10 bg-white px-4 py-2 text-xs font-semibold text-ink"
+              className="soft-button soft-button-secondary"
             >
               {exporting ? '正在导出…' : '一键导出卡片图片'}
             </button>
@@ -968,7 +975,7 @@ export default function Gemini31Pro() {
           </div>
         </section>
 
-        <article className="mt-10 rounded-3xl border border-black/10 bg-white p-6 shadow-soft">
+        <article className="mt-10 glass-card rounded-3xl p-6">
           <header className="border-b border-black/10 pb-6">
             <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-widest text-brand-dark">
               <span className="rounded-full border border-brand/30 bg-brand/10 px-3 py-1 font-semibold">深度解读</span>
@@ -976,7 +983,7 @@ export default function Gemini31Pro() {
               <span className="text-black/40">·</span>
               <span>2026-02</span>
             </div>
-            <h1 className="mt-3 font-serif text-3xl text-ink">功能、评测与应用场景全梳理</h1>
+            <h1 className="mt-3 font-serif text-3xl text-ink">功能、评测与<span className="theme-gradient-text">应用场景</span>全梳理</h1>
             <p className="mt-3 text-sm text-muted">
               本文基于官方模型卡整理，聚焦 Gemini 3.1 Pro 的核心能力、关键指标、评测对比与适用场景，
               方便阅读与转述。
@@ -1000,7 +1007,7 @@ export default function Gemini31Pro() {
 
           <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
             <section className="space-y-6 text-sm text-muted">
-              <div className="rounded-2xl border border-black/10 bg-[#f2efe9] p-4">
+              <div className="glass-card rounded-2xl p-4">
                 <h2 className="text-sm font-semibold uppercase tracking-widest text-black/60">导读</h2>
                 <p className="mt-2 text-sm text-black/70">
                   以“推理能力 + 工程执行”为主线梳理 Gemini 3.1 Pro 的核心能力，并结合官方基准与竞品对比，
@@ -1119,7 +1126,7 @@ export default function Gemini31Pro() {
 
             <aside className="space-y-4">
               <div className="sticky top-6 space-y-4">
-                <div className="rounded-2xl border border-black/10 bg-white/80 p-4">
+                <div className="glass-card rounded-2xl p-4">
                   <h3 className="text-xs font-semibold uppercase tracking-widest text-black/60">目录</h3>
                   <ul className="mt-3 space-y-2 text-xs text-black/60">
                     <li><a className="transition hover:text-brand" href="#g31-1">01 模型定位</a></li>
@@ -1136,7 +1143,7 @@ export default function Gemini31Pro() {
                   </ul>
                 </div>
 
-                <div className="rounded-2xl border border-black/10 bg-[#f2efe9] p-4">
+                <div className="glass-card rounded-2xl p-4">
                   <h3 className="text-xs font-semibold uppercase tracking-widest text-black/60">关键结论</h3>
                   <ul className="mt-3 space-y-2 text-xs text-black/70">
                     <li>• 推理与科学基准领先。</li>
@@ -1152,6 +1159,7 @@ export default function Gemini31Pro() {
             资料来源：Google DeepMind 模型卡与评测表（2026-02）、MiniMax M2.5 官方发布、GLM-5 官方文档。
           </footer>
         </article>
+        </div>
       </div>
 
       <svg className="pointer-events-none fixed inset-0 z-[1] opacity-[0.06] mix-blend-multiply">
@@ -1161,6 +1169,8 @@ export default function Gemini31Pro() {
         </filter>
         <rect width="100%" height="100%" filter="url(#noiseFilter)" />
       </svg>
+
+      <SiteFooter maxWidthClass="max-w-5xl" />
     </div>
   );
 }

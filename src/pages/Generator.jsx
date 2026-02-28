@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { addProject, deleteProject, loadProjects } from '../utils/projects.js';
+import SiteFooter from '../components/SiteFooter.jsx';
+import SiteHeader from '../components/SiteHeader.jsx';
 
 const PROMPT_LIBRARY = [
   {
@@ -393,7 +395,6 @@ const buildProject = ({ html, article, promptSpec, promptText }) => {
 };
 
 export default function Generator() {
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
   const [searchParams] = useSearchParams();
   const [articleText, setArticleText] = useState('');
   const [generateStatus, setGenerateStatus] = useState('');
@@ -544,106 +545,22 @@ export default function Generator() {
 
 
   return (
-    <div className="min-h-screen bg-paper text-ink">
+    <div className="min-h-screen text-ink">
       <div className="relative overflow-hidden">
         <div className="pointer-events-none absolute -top-24 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-brand/20 blur-3xl" />
         <div className="pointer-events-none absolute right-0 top-10 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
-          <header className="rounded-2xl border border-gray-200 bg-white/90 px-4 py-3 shadow-soft backdrop-blur">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-brand/10 p-[2px] ring-1 ring-brand/30 shadow-sm">
-                  <div className="flex h-full w-full items-center justify-center rounded-full bg-brand/15">
-                    <img src="/logo.png" alt="尝鲜AI" className="h-6 w-6 rounded-full object-contain drop-shadow-sm" />
-                  </div>
-                </div>
-                <div className="text-base font-semibold text-ink">尝鲜AI</div>
-              </div>
-            <div className="sm:hidden">
-                <details className="relative">
-                  <summary className="list-none rounded-full border border-gray-200 bg-white p-2 text-ink shadow-soft">
-                    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
-                      <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                    <span className="sr-only">菜单</span>
-                  </summary>
-                  <div className="absolute right-0 mt-2 w-44 rounded-2xl border border-gray-200 bg-white p-2 text-xs shadow-soft">
-                    <Link to="/" className="block rounded-xl px-3 py-2 font-semibold text-ink hover:bg-gray-50">
-                      首页
-                    </Link>
-                    <div className="px-3 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
-                      工具库
-                    </div>
-                    <Link to="/generator" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                      图文生成
-                    </Link>
-                    <div className="px-3 py-1 text-[11px] text-muted">更多工具敬请期待</div>
-                    <Link to="/articles" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                      博客
-                    </Link>
-                    <Link to="/about" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                      关于我们
-                    </Link>
-                    {!isLoggedIn && (
-                      <Link to="/login" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                        登录
-                      </Link>
-                    )}
-                    {isLoggedIn && (
-                      <Link to="/profile" className="block rounded-xl px-3 py-2 text-[11px] font-semibold text-ink hover:bg-gray-50">
-                        个人中心
-                      </Link>
-                    )}
-                  </div>
-                </details>
-              </div>
-              <nav className="hidden flex-wrap items-center gap-3 text-xs font-semibold sm:flex">
-                <Link to="/" className="px-3 py-2 text-muted transition hover:text-ink">
-                  首页
-                </Link>
-                <div className="relative group">
-                  <button type="button" className="rounded-full bg-brand px-4 py-2 text-white shadow-soft">
-                    工具库
-                  </button>
-                  <div className="absolute left-0 top-full z-20 hidden min-w-[160px] rounded-2xl border border-gray-200 bg-white p-2 shadow-soft group-hover:block">
-                    <Link
-                      to="/generator"
-                      className="block rounded-xl bg-brand/10 px-3 py-2 text-[11px] font-semibold text-brand-dark"
-                    >
-                      图文生成
-                    </Link>
-                    <div className="px-3 py-2 text-[11px] text-muted">更多工具敬请期待</div>
-                  </div>
-                </div>
-                <Link to="/articles" className="px-3 py-2 text-muted transition hover:text-ink">
-                  博客
-                </Link>
-              <Link to="/about" className="px-3 py-2 text-muted transition hover:text-ink">
-                关于我们
-              </Link>
-              {!isLoggedIn && (
-                <Link to="/login" className="px-3 py-2 text-muted transition hover:text-ink">
-                  登录
-                </Link>
-              )}
-              {isLoggedIn && (
-                <Link to="/profile" className="px-3 py-2 text-muted transition hover:text-ink">
-                  个人中心
-                </Link>
-              )}
-            </nav>
-            </div>
-          </header>
+          <SiteHeader active="tools" />
 
           <section className="mt-10 grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-1 text-xs text-muted shadow-soft">
+              <div className="glass-card inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs text-muted">
                 <span className="h-1.5 w-1.5 rounded-full bg-brand" />
                 图文生成 · 提示词驱动
               </div>
               <h1 className="mt-4 text-3xl font-semibold leading-tight text-ink sm:text-4xl">
                 用提示词驱动 AI，
-                <span className="text-brand">生成高质量微信图文卡片</span>
+                <span className="theme-gradient-text">生成高质量微信图文卡片</span>
               </h1>
               <p className="mt-4 text-sm text-muted sm:text-base">
                 选择提示词风格，AI 直接输出卡片标题、要点与结构化内容。
@@ -651,13 +568,13 @@ export default function Generator() {
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <a
                   href="#tool"
-                  className="rounded-full bg-brand px-5 py-2 text-xs font-semibold text-white shadow-soft"
+                  className="soft-button soft-button-primary px-5"
                 >
                   开始生成图文
                 </a>
                 <Link
                   to="/articles"
-                  className="rounded-full border border-gray-200 bg-white px-5 py-2 text-xs font-semibold text-ink"
+                  className="soft-button soft-button-secondary px-5"
                 >
                   查看已发布博客
                 </Link>
@@ -668,7 +585,7 @@ export default function Generator() {
                   { title: 'AI 直出内容', desc: '标题 + 要点一次生成' },
                   { title: '双输出', desc: '复制文本 + 导出图片' },
                 ].map((item) => (
-                  <div key={item.title} className="rounded-2xl border border-gray-200 bg-white/90 p-3 text-xs text-muted shadow-soft">
+                  <div key={item.title} className="glass-card rounded-2xl p-3 text-xs text-muted">
                     <p className="text-sm font-semibold text-ink">{item.title}</p>
                     <p className="mt-1">{item.desc}</p>
                   </div>
@@ -686,7 +603,7 @@ export default function Generator() {
               <h2 className="text-xl font-semibold text-ink">图文生成</h2>
               <p className="mt-1 text-sm text-muted">提示词驱动生成不同卡片风格。</p>
             </div>
-            <span className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-semibold text-muted">
+            <span className="soft-button soft-button-secondary px-3 py-1 text-muted">
               提示词驱动
             </span>
           </div>
@@ -766,7 +683,7 @@ export default function Generator() {
                   <button
                     type="button"
                     onClick={handleUseSample}
-                    className="rounded-full border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-ink"
+                    className="soft-button soft-button-secondary"
                   >
                     示例输入
                   </button>
@@ -785,7 +702,7 @@ export default function Generator() {
                   <button
                     type="button"
                     onClick={handleCopyPrompt}
-                    className="rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-semibold text-ink"
+                    className="soft-button soft-button-secondary px-3 py-1 text-[11px]"
                   >
                     复制提示词
                   </button>
@@ -807,7 +724,7 @@ export default function Generator() {
                   <h3 className="text-base font-semibold text-ink">历史项目</h3>
                   <p className="mt-1 text-xs text-muted">每次生成都会保存为项目，可随时查看。</p>
                 </div>
-                <span className="rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-semibold text-muted">
+                <span className="soft-button soft-button-secondary px-3 py-1 text-[11px] text-muted">
                   {projects.length ? `${projects.length} 个项目` : '暂无项目'}
                 </span>
               </div>
@@ -816,7 +733,7 @@ export default function Generator() {
                   {projects.map((project) => (
                     <div
                       key={project.id}
-                      className="flex flex-col justify-between rounded-3xl border border-gray-200 bg-white p-5 shadow-soft"
+                      className="flex flex-col justify-between glass-card rounded-3xl p-5"
                     >
                       <div>
                         <div className="text-xs text-muted">
@@ -852,27 +769,7 @@ export default function Generator() {
 
       </div>
 
-      <footer className="border-t border-gray-200 bg-white/80">
-        <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-          <div className="flex flex-wrap items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-brand/10 p-[2px] ring-1 ring-brand/30 shadow-sm">
-                <div className="flex h-full w-full items-center justify-center rounded-full bg-brand/15">
-                  <img src="/logo.png" alt="尝鲜AI" className="h-5 w-5 rounded-full object-contain drop-shadow-sm" />
-                </div>
-              </div>
-              <div>
-                <div className="text-sm font-semibold text-ink">尝鲜AI</div>
-                <div className="text-xs text-muted">专注于对 AIGC 行业的观察和分享。</div>
-              </div>
-            </div>
-          </div>
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-xs text-muted">
-            <span>© 2026 子节点科技</span>
-            <span>关注公众号：尝鲜AI</span>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter maxWidthClass="max-w-6xl" />
     </div>
   );
 }
