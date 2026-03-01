@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { toPng } from 'html-to-image';
+import logoInline from '../assets/logo.png?inline';
 import SiteFooter from '../components/SiteFooter.jsx';
 import SiteHeader from '../components/SiteHeader.jsx';
 
@@ -298,6 +299,7 @@ const SOURCES = [
 const CARD_DECK = [
   {
     id: '01',
+    type: 'cover',
     meta: '行业研究 · 2026',
     title: '中国网络安全行业全景',
     subtitle: '领域、岗位与技术能力地图',
@@ -406,11 +408,55 @@ export default function ChinaCybersecurityIndustry2026() {
   const dotRefs = useRef([]);
   const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
   const [scale, setScale] = useState(1);
+  const [copyStatus, setCopyStatus] = useState('');
   const [exportStatus, setExportStatus] = useState('');
   const [exporting, setExporting] = useState(false);
+  const [logoUrl, setLogoUrl] = useState(logoInline);
 
   const cardWidth = useMemo(() => 600 * scale, [scale]);
   const cardHeight = useMemo(() => 800 * scale, [scale]);
+
+  useEffect(() => {
+    if (typeof logoInline === 'string' && logoInline.startsWith('data:')) return;
+    let mounted = true;
+    fetch('/logo.png')
+      .then((res) => res.blob())
+      .then((blob) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (mounted && typeof reader.result === 'string') {
+            setLogoUrl(reader.result);
+          }
+        };
+        reader.readAsDataURL(blob);
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const ensureLogoDataUrl = async () => {
+    if (typeof logoUrl === 'string' && logoUrl.startsWith('data:')) {
+      return logoUrl;
+    }
+    try {
+      const res = await fetch('/logo.png');
+      const blob = await res.blob();
+      const dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(typeof reader.result === 'string' ? reader.result : '');
+        reader.readAsDataURL(blob);
+      });
+      if (typeof dataUrl === 'string' && dataUrl.startsWith('data:')) {
+        setLogoUrl(dataUrl);
+        return dataUrl;
+      }
+    } catch (error) {
+      console.warn('China cybersecurity export: logo base64 failed', error);
+    }
+    return logoUrl;
+  };
 
   useEffect(() => {
     const updateScale = () => {
@@ -486,11 +532,70 @@ export default function ChinaCybersecurityIndustry2026() {
     track?.releasePointerCapture?.(event.pointerId);
   };
 
+  const articleText = useMemo(
+    () =>
+      [
+        '中国网络安全行业全景：领域、岗位与技术能力地图（2026）',
+        '',
+        ...CARD_DECK.filter((card) => card.kind !== 'cta').flatMap((card) => [
+          `${card.title}${card.subtitle ? `：${card.subtitle}` : ''}`,
+          ...(card.bullets || []).map((point) => `- ${point}`),
+          '',
+        ]),
+      ].join('\n'),
+    []
+  );
+
+  const handleCopy = async () => {
+    setCopyStatus('');
+    try {
+      await navigator.clipboard.writeText(articleText);
+      setCopyStatus('已复制');
+    } catch (error) {
+      const textarea = document.createElement('textarea');
+      textarea.value = articleText;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'absolute';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      setCopyStatus('已复制');
+    }
+  };
+
   const handleExport = async () => {
     if (exporting) return;
+    setCopyStatus('');
     setExportStatus('');
     setExporting(true);
+    let logoNodes = [];
+    let logoSrcs = [];
     try {
+      const resolvedLogoUrl = await ensureLogoDataUrl();
+      if (resolvedLogoUrl) {
+        logoNodes = Array.from(document.querySelectorAll('img[data-logo]'));
+        logoSrcs = logoNodes.map((node) => node.getAttribute('src'));
+        logoNodes.forEach((node) => node.setAttribute('src', resolvedLogoUrl));
+      }
+      if (document.fonts?.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (error) {
+          console.warn('China cybersecurity export: font ready failed', error);
+        }
+      }
+      if (resolvedLogoUrl) {
+        await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = resolve;
+          img.onerror = resolve;
+          img.src = resolvedLogoUrl;
+        });
+      }
+      await new Promise((resolve) => requestAnimationFrame(() => resolve()));
+
       const nodes = Array.from(document.querySelectorAll('[data-cyber-card]'));
       for (let i = 0; i < nodes.length; i += 1) {
         const backgroundColor = window.getComputedStyle(nodes[i]).backgroundColor || '#ffffff';
@@ -520,6 +625,16 @@ export default function ChinaCybersecurityIndustry2026() {
       console.error('China cybersecurity card export failed', error);
       setExportStatus('导出失败');
     } finally {
+      if (logoNodes.length) {
+        logoNodes.forEach((node, index) => {
+          const value = logoSrcs[index];
+          if (value) {
+            node.setAttribute('src', value);
+          } else {
+            node.removeAttribute('src');
+          }
+        });
+      }
       setExporting(false);
     }
   };
@@ -577,9 +692,14 @@ export default function ChinaCybersecurityIndustry2026() {
                   <h2 className="text-xl font-semibold text-ink">图文卡片（同页展示）</h2>
                   <p className="mt-1 text-sm text-muted">与正文在同一页面，可直接横向浏览并导出 PNG。</p>
                 </div>
-                <button type="button" onClick={handleExport} className="soft-button soft-button-secondary px-4">
-                  {exporting ? '正在导出…' : '一键导出卡片图片'}
-                </button>
+                <div className="flex flex-wrap items-center gap-2">
+                  <button type="button" onClick={handleCopy} className="soft-button soft-button-primary px-4">
+                    一键复制文章内容
+                  </button>
+                  <button type="button" onClick={handleExport} className="soft-button soft-button-secondary px-4">
+                    {exporting ? '正在导出…' : '一键导出卡片图片'}
+                  </button>
+                </div>
               </div>
 
               <div
@@ -592,6 +712,8 @@ export default function ChinaCybersecurityIndustry2026() {
               >
                 {CARD_DECK.map((card) => {
                   const dark = !!card.dark;
+                  const isCover = card.type === 'cover';
+                  const isCta = card.kind === 'cta';
                   return (
                     <div
                       key={card.id}
@@ -615,6 +737,19 @@ export default function ChinaCybersecurityIndustry2026() {
                         />
                         <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-brand/20 blur-3xl" />
                         <div className="pointer-events-none absolute bottom-6 left-8 h-1.5 w-24 bg-brand" />
+                        {isCover && (
+                          <>
+                            <img
+                              src={logoUrl}
+                              alt="尝鲜AI Logo"
+                              data-logo
+                              className="pointer-events-none absolute right-10 top-36 h-40 w-40 rounded-full border border-black/10 opacity-20"
+                            />
+                            <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
+                              CYBER
+                            </div>
+                          </>
+                        )}
                         <div
                           className={`pointer-events-none absolute inset-6 border ${
                             dark ? 'border-white/20' : 'border-black/10'
@@ -623,14 +758,36 @@ export default function ChinaCybersecurityIndustry2026() {
 
                         <div className="relative z-10 grid h-full grid-rows-[auto_1fr_auto] gap-4 px-10 py-10">
                           <div>
-                            <p className={`font-display text-xs uppercase tracking-widest ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
+                            {isCover && (
+                              <div className="mb-4 flex items-center gap-3">
+                                <img
+                                  src={logoUrl}
+                                  alt="尝鲜AI Logo"
+                                  data-logo
+                                  className="h-10 w-10 rounded-full border border-black/10"
+                                />
+                                <div>
+                                  <div className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-dark">尝鲜AI</div>
+                                  <div className="text-[10px] uppercase tracking-[0.2em] text-black/60">科技日报</div>
+                                </div>
+                              </div>
+                            )}
+                            <p className={`font-display text-xs uppercase tracking-widest ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'} ${isCta ? 'text-center' : ''}`}>
                               {card.meta}
                             </p>
-                            <h3 className={`mt-2 font-serif ${card.kind === 'cta' ? 'text-[54px]' : 'text-[34px]'}`}>{card.title}</h3>
+                            <h3 className={`mt-2 font-serif ${isCta ? 'text-center text-[54px]' : isCover ? 'text-[48px]' : 'text-[34px]'}`}>
+                              {card.title}
+                            </h3>
                             {card.subtitle ? (
                               <span
                                 className={`mt-3 inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-widest ${
-                                  dark ? 'bg-[#f2efe9] text-[#121212]' : 'bg-brand text-white'
+                                  isCta
+                                    ? dark
+                                      ? 'mx-auto border border-white/20 bg-white/10 text-[#f2efe9]/70'
+                                      : 'mx-auto border border-black/10 bg-white/70 text-black/60'
+                                    : dark
+                                      ? 'bg-[#f2efe9] text-[#121212]'
+                                      : 'bg-brand text-white'
                                 }`}
                               >
                                 {card.subtitle}
@@ -638,14 +795,26 @@ export default function ChinaCybersecurityIndustry2026() {
                             ) : null}
                           </div>
 
-                          {card.kind === 'cta' ? (
+                          {isCta ? (
                             <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
                               <div
-                                className={`flex h-24 w-24 items-center justify-center rounded-full border text-3xl font-semibold ${
+                                className={`relative flex h-28 w-28 items-center justify-center rounded-full border ${
                                   dark ? 'border-white/30 bg-white/10' : 'border-black/10 bg-white/80'
                                 }`}
                               >
-                                AI
+                                <div className="pointer-events-none absolute inset-2 rounded-full border border-brand/40" />
+                                <img
+                                  src={logoUrl}
+                                  alt="尝鲜AI Logo"
+                                  data-logo
+                                  className="relative h-16 w-16 rounded-full border border-black/10"
+                                />
+                              </div>
+                              <div className="text-xs uppercase tracking-[0.4em] text-black/50">尝鲜AI · 科技日报</div>
+                              <div className="flex items-center gap-3">
+                                <span className="h-px w-10 bg-brand/60" />
+                                <span className="text-[11px] uppercase tracking-[0.4em] text-black/40">AIGC</span>
+                                <span className="h-px w-10 bg-brand/60" />
                               </div>
                               <p className={`max-w-[320px] text-base ${dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
                                 专注于 AIGC 与网络安全行业观察，持续输出可复用的研究内容。
@@ -680,7 +849,10 @@ export default function ChinaCybersecurityIndustry2026() {
 
                           <div className={`flex justify-between text-xs ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
                             <span>Card {card.id}</span>
-                            <span>尝鲜AI · 行业研究</span>
+                            <span className="flex items-center gap-2">
+                              <img src={logoUrl} alt="尝鲜AI Logo" data-logo className="h-4 w-4 rounded-full border border-black/10" />
+                              <span>尝鲜AI · 行业研究</span>
+                            </span>
                           </div>
                         </div>
 
@@ -711,7 +883,9 @@ export default function ChinaCybersecurityIndustry2026() {
                 </div>
               </div>
               <p className="mt-2 text-center text-xs text-muted sm:hidden">左右滑动查看卡片</p>
-              {exportStatus && <p className="mt-2 text-center text-xs text-muted">{exportStatus}</p>}
+              {(copyStatus || exportStatus) && (
+                <p className="mt-2 text-center text-xs text-muted">{copyStatus || exportStatus}</p>
+              )}
             </section>
 
             <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
