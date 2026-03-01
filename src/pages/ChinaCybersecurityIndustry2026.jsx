@@ -337,6 +337,14 @@ export default function ChinaCybersecurityIndustry2026() {
                   >
                     下载 SVG
                   </a>
+                  <a
+                    href="/assets/posts/china-cybersecurity-industry-cards.html"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="soft-button soft-button-secondary px-4"
+                  >
+                    打开图文卡片
+                  </a>
                 </div>
               </div>
             </header>
@@ -468,11 +476,22 @@ export default function ChinaCybersecurityIndustry2026() {
                 </div>
 
                 <div className="glass-card rounded-3xl p-6 sm:p-7">
-                  <h2 className="text-xl font-semibold text-ink">七、SVG 思维导图</h2>
+                  <h2 className="text-xl font-semibold text-ink">七、SVG 思维导图与图文卡片</h2>
                   <p className="mt-3 text-sm text-muted">
                     导图覆盖“行业驱动、赛道领域、岗位族群、技术栈、职业路径、求职策略”六大层次，
                     可直接用于宣讲、培训或求职复盘。
                   </p>
+                  <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white">
+                    <div className="border-b border-gray-200 bg-gray-50 px-4 py-2 text-xs font-semibold text-muted">
+                      图文卡片预览（横向滑动）
+                    </div>
+                    <iframe
+                      title="中国网络安全行业图文卡片"
+                      src="/assets/posts/china-cybersecurity-industry-cards.html"
+                      loading="lazy"
+                      className="h-[680px] w-full bg-white"
+                    />
+                  </div>
                   <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-3">
                     <img
                       src="/assets/posts/china-cybersecurity-industry-mindmap.svg"
@@ -487,6 +506,14 @@ export default function ChinaCybersecurityIndustry2026() {
                     className="mt-4 inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-xs font-semibold text-brand-dark"
                   >
                     查看高清 SVG
+                  </a>
+                  <a
+                    href="/assets/posts/china-cybersecurity-industry-cards.html"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="ml-2 mt-4 inline-flex items-center rounded-full border border-brand/30 bg-white px-4 py-2 text-xs font-semibold text-brand-dark"
+                  >
+                    查看图文卡片（HTML）
                   </a>
                 </div>
               </div>
