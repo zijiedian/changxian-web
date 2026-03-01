@@ -1,3 +1,5 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { toPng } from 'html-to-image';
 import SiteFooter from '../components/SiteFooter.jsx';
 import SiteHeader from '../components/SiteHeader.jsx';
 
@@ -293,7 +295,235 @@ const SOURCES = [
   },
 ];
 
+const CARD_DECK = [
+  {
+    id: '01',
+    meta: '行业研究 · 2026',
+    title: '中国网络安全行业全景',
+    subtitle: '领域、岗位与技术能力地图',
+    stats: [
+      { label: '产业规模', value: '823 亿元' },
+      { label: '人才缺口', value: '300 万+' },
+      { label: '法规节点', value: '2025/2026' },
+      { label: '趋势', value: '攻防+合规+工程' },
+    ],
+    bullets: [
+      '网络安全已从单点采购走向持续运营。',
+      '岗位结构向“攻防、工程、合规、业务融合”演化。',
+      '企业更重视可落地的实战经验与项目产出。',
+    ],
+  },
+  {
+    id: '02',
+    meta: '政策主线',
+    title: '法规进入执行期',
+    subtitle: '岗位需求持续抬升',
+    bullets: [
+      '《网络数据安全管理条例》已于 2025-01-01 起施行。',
+      '《网络安全法》修订决定自 2026-01-01 起施行。',
+      '合规、审计、事件响应等岗位需求同步增长。',
+    ],
+  },
+  {
+    id: '03',
+    meta: '赛道地图',
+    title: '10 大核心赛道',
+    subtitle: '从 SOC 到 AI 安全',
+    bullets: [
+      'SOC 与检测响应、攻防渗透、数据安全、云安全。',
+      '应用与供应链安全、身份安全、工控与车联网安全。',
+      'GRC 合规、AI 安全与安全产品平台研发并行。',
+    ],
+  },
+  {
+    id: '04',
+    meta: '岗位结构',
+    title: '16 类高频岗位',
+    subtitle: '技术 + 交付双要求',
+    bullets: [
+      'SOC、应急、渗透、红队仍是基础需求池。',
+      'DevSecOps、云安全、数据安全岗位增长显著。',
+      'AI 安全工程师与安全架构师成为高价值岗位。',
+    ],
+  },
+  {
+    id: '05',
+    meta: '求职路径',
+    title: '四阶段成长路线',
+    subtitle: '入门到专家的可执行策略',
+    bullets: [
+      '0-1 年：打牢网络、系统、脚本与日志基础。',
+      '1-3 年：聚焦单一方向并沉淀可展示成果。',
+      '3-5 年：从执行走向方案 owner，强化协同与架构思维。',
+      '5 年+：建设体系化能力，向负责人/架构师发展。',
+    ],
+  },
+  {
+    id: '06',
+    meta: '能力画像',
+    title: '企业真正看重什么',
+    subtitle: '不是“只会工具”',
+    dark: true,
+    bullets: [
+      '漏洞复现能力 + 检测规则落地能力。',
+      '从发现风险到整改闭环的交付能力。',
+      '跨团队协同、成本意识与业务理解能力。',
+    ],
+  },
+  {
+    id: '07',
+    meta: '证书建议',
+    title: '证书是加分项',
+    subtitle: '不能替代项目经验',
+    bullets: [
+      '国内方向：CISP、CISAW、等保测评相关资质。',
+      '国际方向：CISSP、CISA、OSCP、CCSP。',
+      '云厂商方向：阿里云、华为云、腾讯云安全认证。',
+    ],
+  },
+  {
+    id: '08',
+    meta: '结论',
+    title: '一句话看行业',
+    subtitle: '网络安全是长期岗位市场',
+    bullets: [
+      '招聘逻辑正在从“证书导向”转向“实战导向”。',
+      '技术能力与治理能力将长期同时存在。',
+      '先选赛道，再做可证明成果，是最稳路径。',
+    ],
+  },
+  {
+    id: '09',
+    meta: '关于我们',
+    title: '尝鲜AI',
+    subtitle: '持续更新 AI × 安全研究',
+    kind: 'cta',
+  },
+];
+
 export default function ChinaCybersecurityIndustry2026() {
+  const trackRef = useRef(null);
+  const dotRefs = useRef([]);
+  const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
+  const [scale, setScale] = useState(1);
+  const [exportStatus, setExportStatus] = useState('');
+  const [exporting, setExporting] = useState(false);
+
+  const cardWidth = useMemo(() => 600 * scale, [scale]);
+  const cardHeight = useMemo(() => 800 * scale, [scale]);
+
+  useEffect(() => {
+    const updateScale = () => {
+      const maxWidth = window.innerWidth - 48;
+      const widthScale = maxWidth / 600;
+      const heightScale = (window.innerHeight * 0.6) / 800;
+      const nextScale = Math.min(1, widthScale, heightScale);
+      setScale(Math.max(0.55, nextScale));
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
+
+  useEffect(() => {
+    const updateDots = () => {
+      const track = trackRef.current;
+      if (!track) return;
+      const step = cardWidth + 24;
+      const index = Math.round(track.scrollLeft / step);
+      dotRefs.current.forEach((dot, i) => {
+        if (!dot) return;
+        dot.classList.toggle('bg-brand', i === Math.min(index, CARD_DECK.length - 1));
+        dot.classList.toggle('bg-black/20', i !== Math.min(index, CARD_DECK.length - 1));
+      });
+    };
+
+    updateDots();
+    const track = trackRef.current;
+    if (!track) return undefined;
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      window.requestAnimationFrame(() => {
+        updateDots();
+        ticking = false;
+      });
+      ticking = true;
+    };
+
+    track.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', updateDots);
+    return () => {
+      track.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', updateDots);
+    };
+  }, [cardWidth]);
+
+  const handlePointerDown = (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    const track = trackRef.current;
+    if (!track) return;
+    track.setPointerCapture?.(event.pointerId);
+    dragState.current.isDown = true;
+    dragState.current.startX = event.clientX;
+    dragState.current.scrollLeft = track.scrollLeft;
+  };
+
+  const handlePointerMove = (event) => {
+    if (!dragState.current.isDown) return;
+    const track = trackRef.current;
+    if (!track) return;
+    const walk = event.clientX - dragState.current.startX;
+    track.scrollLeft = dragState.current.scrollLeft - walk;
+  };
+
+  const handlePointerUp = (event) => {
+    if (!dragState.current.isDown) return;
+    dragState.current.isDown = false;
+    const track = trackRef.current;
+    track?.releasePointerCapture?.(event.pointerId);
+  };
+
+  const handleExport = async () => {
+    if (exporting) return;
+    setExportStatus('');
+    setExporting(true);
+    try {
+      const nodes = Array.from(document.querySelectorAll('[data-cyber-card]'));
+      for (let i = 0; i < nodes.length; i += 1) {
+        const backgroundColor = window.getComputedStyle(nodes[i]).backgroundColor || '#ffffff';
+        const dataUrl = await toPng(nodes[i], {
+          cacheBust: true,
+          pixelRatio: 2,
+          width: 600,
+          height: 800,
+          backgroundColor,
+          style: {
+            transform: 'scale(1)',
+            transformOrigin: 'top left',
+            width: '600px',
+            height: '800px',
+          },
+        });
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = `china-cybersecurity-industry-2026-card-${String(i + 1).padStart(2, '0')}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+      setExportStatus('已导出');
+    } catch (error) {
+      console.error('China cybersecurity card export failed', error);
+      setExportStatus('导出失败');
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen text-ink">
       <div className="relative overflow-hidden">
@@ -337,17 +567,152 @@ export default function ChinaCybersecurityIndustry2026() {
                   >
                     下载 SVG
                   </a>
-                  <a
-                    href="/assets/posts/china-cybersecurity-industry-cards.html"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="soft-button soft-button-secondary px-4"
-                  >
-                    打开图文卡片
-                  </a>
                 </div>
               </div>
             </header>
+
+            <section className="glass-card rounded-3xl p-4 sm:p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-xl font-semibold text-ink">图文卡片（同页展示）</h2>
+                  <p className="mt-1 text-sm text-muted">与正文在同一页面，可直接横向浏览并导出 PNG。</p>
+                </div>
+                <button type="button" onClick={handleExport} className="soft-button soft-button-secondary px-4">
+                  {exporting ? '正在导出…' : '一键导出卡片图片'}
+                </button>
+              </div>
+
+              <div
+                ref={trackRef}
+                className="scrollbar-hide mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerUp}
+              >
+                {CARD_DECK.map((card) => {
+                  const dark = !!card.dark;
+                  return (
+                    <div
+                      key={card.id}
+                      className="snap-start"
+                      style={{ width: `${cardWidth}px`, height: `${cardHeight}px`, flex: `0 0 ${cardWidth}px` }}
+                    >
+                      <article
+                        data-cyber-card
+                        className={`relative h-[800px] w-[600px] overflow-hidden border shadow-poster ${
+                          dark ? 'border-white/20 bg-[#121212] text-[#f2efe9]' : 'border-black/10 bg-[#f2efe9] text-[#1a1a1a]'
+                        }`}
+                        style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
+                      >
+                        <div
+                          className={`pointer-events-none absolute inset-0 opacity-70 ${
+                            dark
+                              ? 'bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]'
+                              : 'bg-[linear-gradient(rgba(0,0,0,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.06)_1px,transparent_1px)]'
+                          }`}
+                          style={{ backgroundSize: '26px 26px' }}
+                        />
+                        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-brand/20 blur-3xl" />
+                        <div className="pointer-events-none absolute bottom-6 left-8 h-1.5 w-24 bg-brand" />
+                        <div
+                          className={`pointer-events-none absolute inset-6 border ${
+                            dark ? 'border-white/20' : 'border-black/10'
+                          }`}
+                        />
+
+                        <div className="relative z-10 grid h-full grid-rows-[auto_1fr_auto] gap-4 px-10 py-10">
+                          <div>
+                            <p className={`font-display text-xs uppercase tracking-widest ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
+                              {card.meta}
+                            </p>
+                            <h3 className={`mt-2 font-serif ${card.kind === 'cta' ? 'text-[54px]' : 'text-[34px]'}`}>{card.title}</h3>
+                            {card.subtitle ? (
+                              <span
+                                className={`mt-3 inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-widest ${
+                                  dark ? 'bg-[#f2efe9] text-[#121212]' : 'bg-brand text-white'
+                                }`}
+                              >
+                                {card.subtitle}
+                              </span>
+                            ) : null}
+                          </div>
+
+                          {card.kind === 'cta' ? (
+                            <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+                              <div
+                                className={`flex h-24 w-24 items-center justify-center rounded-full border text-3xl font-semibold ${
+                                  dark ? 'border-white/30 bg-white/10' : 'border-black/10 bg-white/80'
+                                }`}
+                              >
+                                AI
+                              </div>
+                              <p className={`max-w-[320px] text-base ${dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
+                                专注于 AIGC 与网络安全行业观察，持续输出可复用的研究内容。
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              {card.stats?.length ? (
+                                <div className="grid grid-cols-2 gap-3">
+                                  {card.stats.map((item) => (
+                                    <div
+                                      key={item.label}
+                                      className={`border p-3 ${dark ? 'border-white/20 bg-white/5 text-[#f2efe9]/80' : 'border-black/10 bg-white/70 text-black/70'}`}
+                                    >
+                                      <div className={`text-[10px] uppercase tracking-[0.2em] ${dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
+                                        {item.label}
+                                      </div>
+                                      <div className="mt-1 text-xl font-semibold">{item.value}</div>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : null}
+                              <ul className={`mt-4 space-y-2 text-sm leading-relaxed ${dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
+                                {(card.bullets || []).map((point) => (
+                                  <li key={point} className="border-l-2 border-brand/60 pl-3">
+                                    {point}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          <div className={`flex justify-between text-xs ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
+                            <span>Card {card.id}</span>
+                            <span>尝鲜AI · 行业研究</span>
+                          </div>
+                        </div>
+
+                        <div
+                          className={`absolute right-8 top-8 font-display text-xs tracking-[0.4em] ${
+                            dark ? 'text-[#f2efe9]/70' : 'text-black/60'
+                          }`}
+                        >
+                          NO.{card.id}
+                        </div>
+                      </article>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-2 flex justify-center">
+                <div className="glass-card flex items-center gap-2 rounded-full px-3 py-2">
+                  {CARD_DECK.map((card, index) => (
+                    <span
+                      key={card.id}
+                      ref={(el) => {
+                        dotRefs.current[index] = el;
+                      }}
+                      className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-brand' : 'bg-black/20'}`}
+                    />
+                  ))}
+                </div>
+              </div>
+              <p className="mt-2 text-center text-xs text-muted sm:hidden">左右滑动查看卡片</p>
+              {exportStatus && <p className="mt-2 text-center text-xs text-muted">{exportStatus}</p>}
+            </section>
 
             <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {INSIGHTS.map((item) => (
@@ -476,22 +841,12 @@ export default function ChinaCybersecurityIndustry2026() {
                 </div>
 
                 <div className="glass-card rounded-3xl p-6 sm:p-7">
-                  <h2 className="text-xl font-semibold text-ink">七、SVG 思维导图与图文卡片</h2>
+                  <h2 className="text-xl font-semibold text-ink">七、SVG 思维导图</h2>
                   <p className="mt-3 text-sm text-muted">
                     导图覆盖“行业驱动、赛道领域、岗位族群、技术栈、职业路径、求职策略”六大层次，
                     可直接用于宣讲、培训或求职复盘。
                   </p>
-                  <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white">
-                    <div className="border-b border-gray-200 bg-gray-50 px-4 py-2 text-xs font-semibold text-muted">
-                      图文卡片预览（横向滑动）
-                    </div>
-                    <iframe
-                      title="中国网络安全行业图文卡片"
-                      src="/assets/posts/china-cybersecurity-industry-cards.html"
-                      loading="lazy"
-                      className="h-[680px] w-full bg-white"
-                    />
-                  </div>
+                  <p className="mt-2 text-xs text-muted">图文卡片已在上方同页展示，可直接导出图片。</p>
                   <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-3">
                     <img
                       src="/assets/posts/china-cybersecurity-industry-mindmap.svg"
@@ -506,14 +861,6 @@ export default function ChinaCybersecurityIndustry2026() {
                     className="mt-4 inline-flex items-center rounded-full border border-brand/30 bg-brand/10 px-4 py-2 text-xs font-semibold text-brand-dark"
                   >
                     查看高清 SVG
-                  </a>
-                  <a
-                    href="/assets/posts/china-cybersecurity-industry-cards.html"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="ml-2 mt-4 inline-flex items-center rounded-full border border-brand/30 bg-white px-4 py-2 text-xs font-semibold text-brand-dark"
-                  >
-                    查看图文卡片（HTML）
                   </a>
                 </div>
               </div>
