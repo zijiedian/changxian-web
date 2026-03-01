@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toPng } from 'html-to-image';
+import BlogPosterCard from '../components/BlogPosterCard.jsx';
+import BlogPosterDeck from '../components/BlogPosterDeck.jsx';
 import SiteFooter from '../components/SiteFooter.jsx';
 import SiteHeader from '../components/SiteHeader.jsx';
 
@@ -162,19 +164,12 @@ function LineItem({ num, title, text }) {
 }
 
 export default function AISecurityC2() {
-  const trackRef = useRef(null);
-  const dotRefs = useRef([]);
-  const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
-  const [scale, setScale] = useState(1);
   const [copyStatus, setCopyStatus] = useState('');
   const [exportStatus, setExportStatus] = useState('');
   const [exporting, setExporting] = useState(false);
   const [logoUrl, setLogoUrl] = useState('/logo.png');
   const [lolc2Data, setLolc2Data] = useState(null);
   const [lolc2Error, setLolc2Error] = useState('');
-
-  const cardWidth = useMemo(() => 600 * scale, [scale]);
-  const cardHeight = useMemo(() => 800 * scale, [scale]);
 
   useEffect(() => {
     let mounted = true;
@@ -238,79 +233,6 @@ export default function AISecurityC2() {
 
     return rows;
   }, [lolc2Data]);
-
-  useEffect(() => {
-    const updateScale = () => {
-      const maxWidth = window.innerWidth - 48;
-      const widthScale = maxWidth / 600;
-      const heightScale = (window.innerHeight * 0.6) / 800;
-      const nextScale = Math.min(1, widthScale, heightScale);
-      setScale(Math.max(0.55, nextScale));
-    };
-
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
-  }, []);
-
-  useEffect(() => {
-    const updateDots = () => {
-      const track = trackRef.current;
-      if (!track) return;
-      const gap = 24;
-      const step = cardWidth + gap;
-      const index = Math.round(track.scrollLeft / step);
-      dotRefs.current.forEach((dot, i) => {
-        if (!dot) return;
-        dot.classList.toggle('bg-brand', i === Math.min(index, cards.length - 1));
-        dot.classList.toggle('bg-black/20', i !== Math.min(index, cards.length - 1));
-      });
-    };
-
-    updateDots();
-    const track = trackRef.current;
-    if (!track) return undefined;
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      window.requestAnimationFrame(() => {
-        updateDots();
-        ticking = false;
-      });
-      ticking = true;
-    };
-    track.addEventListener('scroll', onScroll);
-    window.addEventListener('resize', updateDots);
-    return () => {
-      track.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', updateDots);
-    };
-  }, [cardWidth]);
-
-  const handlePointerDown = (event) => {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
-    const track = trackRef.current;
-    if (!track) return;
-    track.setPointerCapture?.(event.pointerId);
-    dragState.current.isDown = true;
-    dragState.current.startX = event.clientX;
-    dragState.current.scrollLeft = track.scrollLeft;
-  };
-
-  const handlePointerMove = (event) => {
-    if (!dragState.current.isDown) return;
-    const track = trackRef.current;
-    if (!track) return;
-    const walk = event.clientX - dragState.current.startX;
-    track.scrollLeft = dragState.current.scrollLeft - walk;
-  };
-
-  const handlePointerUp = (event) => {
-    if (!dragState.current.isDown) return;
-    dragState.current.isDown = false;
-    const track = trackRef.current;
-    track?.releasePointerCapture?.(event.pointerId);
-  };
 
   const articleText = useMemo(
     () =>
@@ -555,169 +477,52 @@ export default function AISecurityC2() {
           <SiteHeader active="articles" />
 
           <section className="mt-8">
-            <div
-              ref={trackRef}
-              className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerLeave={handlePointerUp}
-            >
-              {cards.map((card) => {
-                const dark = !!card.dark;
-                const isCta = card.type === 'cta';
-                return (
-                  <div
-                    key={card.id}
-                    className="snap-start"
-                    style={{ width: `${cardWidth}px`, height: `${cardHeight}px`, flex: `0 0 ${cardWidth}px` }}
-                  >
-                    <article
-                      data-card
-                      className={`relative h-[800px] w-[600px] overflow-hidden border shadow-poster ${
-                        dark ? 'bg-[#121212] text-[#f2efe9] border-white/20' : 'bg-[#f2efe9] text-[#1a1a1a] border-black/10'
-                      }`}
-                      style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
-                    >
-                      <div
-                        className={`pointer-events-none absolute inset-0 opacity-70 ${
-                          dark
-                            ? 'bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]'
-                            : 'bg-[linear-gradient(rgba(0,0,0,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.06)_1px,transparent_1px)]'
-                        }`}
-                        style={{ backgroundSize: '26px 26px' }}
-                      />
-                      <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-brand/20 blur-3xl" />
-                      <div className="pointer-events-none absolute bottom-6 left-8 h-1.5 w-24 bg-brand" />
-                      {card.type === 'cover' && (
-                        <>
-                          <img
-                            src={logoUrl}
-                            alt="尝鲜AI Logo"
-                            className="pointer-events-none absolute right-10 top-36 h-40 w-40 rounded-full border border-black/10 opacity-20"
-                          />
-                          <div className="pointer-events-none absolute right-4 top-24 font-display text-[120px] leading-none text-black/10">
-                            C2
-                          </div>
-                          <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
-                            SECURITY
-                          </div>
-                        </>
-                      )}
-                      <div
-                        className={`pointer-events-none absolute inset-6 border ${
-                          dark ? 'border-white/20' : 'border-black/10'
-                        }`}
-                      />
-
-                      <div className="relative z-10 grid h-full grid-rows-[auto_1fr_auto] gap-4 px-10 py-10">
-                        <div>
-                          {card.type === 'cover' && (
-                            <div className="mb-4 flex items-center gap-3">
-                              <img src={logoUrl} alt="尝鲜AI Logo" className="h-10 w-10 rounded-full border border-black/10" />
-                              <div>
-                                <div className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-dark">尝鲜AI</div>
-                                <div className="text-[10px] uppercase tracking-[0.2em] text-black/60">科技日报</div>
-                              </div>
-                            </div>
-                          )}
-                          <p
-                            className={`font-display text-xs uppercase tracking-widest ${
-                              dark ? 'text-[#f2efe9]/70' : 'text-black/60'
-                            } ${isCta ? 'text-center' : ''}`}
-                          >
-                            {card.meta}
-                          </p>
-                          {card.type === 'cover' ? (
-                            <>
-                              <h1 className="mt-2 font-serif text-[56px] leading-[1.02] tracking-wide">{card.title}</h1>
-                              <p className={`mt-3 text-lg font-medium ${dark ? 'text-[#f2efe9]/80' : 'text-black/80'}`}>
-                                {card.subtitle}
-                              </p>
-                              <span className="mt-4 inline-flex items-center border border-brand/30 bg-brand/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-dark">
-                                AI 安全专题
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <h2 className={`mt-2 font-serif text-[30px] ${isCta ? 'text-center' : ''}`}>{card.title}</h2>
-                              {card.subtitle ? (
-                                <span
-                                  className={`mt-2 inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-widest ${
-                                    isCta
-                                      ? dark
-                                        ? 'border border-white/20 bg-white/10 text-[#f2efe9]/70'
-                                        : 'border border-black/10 bg-white/70 text-black/60'
-                                      : dark
-                                        ? 'bg-[#f2efe9] text-[#121212]'
-                                        : 'bg-brand text-white'
-                                  } ${isCta ? 'mx-auto' : ''}`}
-                                >
-                                  {card.subtitle}
-                                </span>
-                              ) : null}
-                            </>
-                          )}
-                        </div>
-
-                        <div>{renderBody(card)}</div>
-
-                        <div className={`flex justify-between text-xs ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
-                          <span>Card {card.id}</span>
-                          <span className="flex items-center gap-2">
-                            <img src={logoUrl} alt="尝鲜AI Logo" className="h-4 w-4 rounded-full border border-black/10" />
-                            <span>尝鲜AI · 科技日报</span>
-                          </span>
-                        </div>
+            <BlogPosterDeck
+              cards={cards}
+              showMobileHint
+              trackClassName="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
+              renderCard={(card, { scale }) => (
+                <BlogPosterCard
+                  card={card}
+                  scale={scale}
+                  logoUrl={logoUrl}
+                  coverBadgeText="AI 安全专题"
+                  coverDecoration={
+                    <>
+                      <div className="pointer-events-none absolute right-4 top-24 font-display text-[120px] leading-none text-black/10">
+                        C2
                       </div>
-
-                      <div
-                        className={`absolute right-8 top-8 font-display text-xs tracking-[0.4em] ${
-                          dark ? 'text-[#f2efe9]/70' : 'text-black/60'
-                        }`}
-                      >
-                        NO.{card.id}
+                      <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
+                        SECURITY
                       </div>
-                    </article>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="mt-2 flex justify-center">
-              <div className="glass-card flex items-center gap-2 rounded-full px-3 py-2">
-                {cards.map((card, index) => (
-                  <span
-                    key={card.id}
-                    ref={(el) => {
-                      dotRefs.current[index] = el;
-                    }}
-                    className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-brand' : 'bg-black/20'}`}
-                  />
-                ))}
-              </div>
-            </div>
-            <p className="mt-2 text-center text-xs text-muted sm:hidden">左右滑动查看卡片</p>
-
-            <div className="mt-3 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-              <button
-                type="button"
-                onClick={handleCopy}
-                className="w-full soft-button soft-button-primary sm:w-auto"
-              >
-                一键复制文章内容
-              </button>
-              <button
-                type="button"
-                onClick={handleExport}
-                className="w-full soft-button soft-button-secondary sm:w-auto"
-              >
-                {exporting ? '正在导出…' : '一键导出卡片图片'}
-              </button>
-              {(copyStatus || exportStatus) && (
-                <span className="text-xs text-muted">{copyStatus || exportStatus}</span>
+                    </>
+                  }
+                >
+                  {renderBody(card)}
+                </BlogPosterCard>
               )}
-            </div>
+              controls={
+                <div className="mt-3 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+                  <button
+                    type="button"
+                    onClick={handleCopy}
+                    className="w-full soft-button soft-button-primary sm:w-auto"
+                  >
+                    一键复制文章内容
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleExport}
+                    className="w-full soft-button soft-button-secondary sm:w-auto"
+                  >
+                    {exporting ? '正在导出…' : '一键导出卡片图片'}
+                  </button>
+                  {(copyStatus || exportStatus) && (
+                    <span className="text-xs text-muted">{copyStatus || exportStatus}</span>
+                  )}
+                </div>
+              }
+            />
           </section>
 
         <article className="mt-8 glass-card rounded-3xl p-4 sm:mt-10 sm:p-6">

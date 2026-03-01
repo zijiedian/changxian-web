@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toPng } from 'html-to-image';
 import logoInline from '../assets/logo.png?inline';
+import BlogPosterCard from '../components/BlogPosterCard.jsx';
+import BlogPosterDeck from '../components/BlogPosterDeck.jsx';
 import SiteFooter from '../components/SiteFooter.jsx';
 import SiteHeader from '../components/SiteHeader.jsx';
 
@@ -404,17 +406,10 @@ const CARD_DECK = [
 ];
 
 export default function ChinaCybersecurityIndustry2026() {
-  const trackRef = useRef(null);
-  const dotRefs = useRef([]);
-  const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
-  const [scale, setScale] = useState(1);
   const [copyStatus, setCopyStatus] = useState('');
   const [exportStatus, setExportStatus] = useState('');
   const [exporting, setExporting] = useState(false);
   const [logoUrl, setLogoUrl] = useState(logoInline);
-
-  const cardWidth = useMemo(() => 600 * scale, [scale]);
-  const cardHeight = useMemo(() => 800 * scale, [scale]);
 
   useEffect(() => {
     if (typeof logoInline === 'string' && logoInline.startsWith('data:')) return;
@@ -456,80 +451,6 @@ export default function ChinaCybersecurityIndustry2026() {
       console.warn('China cybersecurity export: logo base64 failed', error);
     }
     return logoUrl;
-  };
-
-  useEffect(() => {
-    const updateScale = () => {
-      const maxWidth = window.innerWidth - 48;
-      const widthScale = maxWidth / 600;
-      const heightScale = (window.innerHeight * 0.6) / 800;
-      const nextScale = Math.min(1, widthScale, heightScale);
-      setScale(Math.max(0.55, nextScale));
-    };
-
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
-  }, []);
-
-  useEffect(() => {
-    const updateDots = () => {
-      const track = trackRef.current;
-      if (!track) return;
-      const step = cardWidth + 24;
-      const index = Math.round(track.scrollLeft / step);
-      dotRefs.current.forEach((dot, i) => {
-        if (!dot) return;
-        dot.classList.toggle('bg-brand', i === Math.min(index, CARD_DECK.length - 1));
-        dot.classList.toggle('bg-black/20', i !== Math.min(index, CARD_DECK.length - 1));
-      });
-    };
-
-    updateDots();
-    const track = trackRef.current;
-    if (!track) return undefined;
-
-    let ticking = false;
-    const onScroll = () => {
-      if (ticking) return;
-      window.requestAnimationFrame(() => {
-        updateDots();
-        ticking = false;
-      });
-      ticking = true;
-    };
-
-    track.addEventListener('scroll', onScroll);
-    window.addEventListener('resize', updateDots);
-    return () => {
-      track.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', updateDots);
-    };
-  }, [cardWidth]);
-
-  const handlePointerDown = (event) => {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
-    const track = trackRef.current;
-    if (!track) return;
-    track.setPointerCapture?.(event.pointerId);
-    dragState.current.isDown = true;
-    dragState.current.startX = event.clientX;
-    dragState.current.scrollLeft = track.scrollLeft;
-  };
-
-  const handlePointerMove = (event) => {
-    if (!dragState.current.isDown) return;
-    const track = trackRef.current;
-    if (!track) return;
-    const walk = event.clientX - dragState.current.startX;
-    track.scrollLeft = dragState.current.scrollLeft - walk;
-  };
-
-  const handlePointerUp = (event) => {
-    if (!dragState.current.isDown) return;
-    dragState.current.isDown = false;
-    const track = trackRef.current;
-    track?.releasePointerCapture?.(event.pointerId);
   };
 
   const articleText = useMemo(
@@ -596,7 +517,7 @@ export default function ChinaCybersecurityIndustry2026() {
       }
       await new Promise((resolve) => requestAnimationFrame(() => resolve()));
 
-      const nodes = Array.from(document.querySelectorAll('[data-cyber-card]'));
+      const nodes = Array.from(document.querySelectorAll('[data-card]'));
       for (let i = 0; i < nodes.length; i += 1) {
         const backgroundColor = window.getComputedStyle(nodes[i]).backgroundColor || '#ffffff';
         const dataUrl = await toPng(nodes[i], {
@@ -702,190 +623,82 @@ export default function ChinaCybersecurityIndustry2026() {
                 </div>
               </div>
 
-              <div
-                ref={trackRef}
-                className="scrollbar-hide mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerLeave={handlePointerUp}
-              >
-                {CARD_DECK.map((card) => {
-                  const dark = !!card.dark;
-                  const isCover = card.type === 'cover';
-                  const isCta = card.kind === 'cta';
-                  return (
-                    <div
-                      key={card.id}
-                      className="snap-start"
-                      style={{ width: `${cardWidth}px`, height: `${cardHeight}px`, flex: `0 0 ${cardWidth}px` }}
-                    >
-                      <article
-                        data-cyber-card
-                        className={`relative h-[800px] w-[600px] overflow-hidden border shadow-poster ${
-                          dark ? 'border-white/20 bg-[#121212] text-[#f2efe9]' : 'border-black/10 bg-[#f2efe9] text-[#1a1a1a]'
-                        }`}
-                        style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
-                      >
+              <BlogPosterDeck
+                cards={CARD_DECK}
+                showMobileHint
+                trackClassName="scrollbar-hide mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
+                renderCard={(card, { scale }) => (
+                  <BlogPosterCard
+                    card={card}
+                    scale={scale}
+                    logoUrl={logoUrl}
+                    coverBadgeText="行业研究特辑"
+                    coverDecoration={
+                      <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
+                        CYBER
+                      </div>
+                    }
+                    footerText="尝鲜AI · 行业研究"
+                  >
+                    {card.kind === 'cta' ? (
+                      <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
                         <div
-                          className={`pointer-events-none absolute inset-0 opacity-70 ${
-                            dark
-                              ? 'bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]'
-                              : 'bg-[linear-gradient(rgba(0,0,0,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.06)_1px,transparent_1px)]'
-                          }`}
-                          style={{ backgroundSize: '26px 26px' }}
-                        />
-                        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-brand/20 blur-3xl" />
-                        <div className="pointer-events-none absolute bottom-6 left-8 h-1.5 w-24 bg-brand" />
-                        {isCover && (
-                          <>
-                            <img
-                              src={logoUrl}
-                              alt="尝鲜AI Logo"
-                              data-logo
-                              className="pointer-events-none absolute right-10 top-36 h-40 w-40 rounded-full border border-black/10 opacity-20"
-                            />
-                            <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
-                              CYBER
-                            </div>
-                          </>
-                        )}
-                        <div
-                          className={`pointer-events-none absolute inset-6 border ${
-                            dark ? 'border-white/20' : 'border-black/10'
-                          }`}
-                        />
-
-                        <div className="relative z-10 grid h-full grid-rows-[auto_1fr_auto] gap-4 px-10 py-10">
-                          <div>
-                            {isCover && (
-                              <div className="mb-4 flex items-center gap-3">
-                                <img
-                                  src={logoUrl}
-                                  alt="尝鲜AI Logo"
-                                  data-logo
-                                  className="h-10 w-10 rounded-full border border-black/10"
-                                />
-                                <div>
-                                  <div className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-dark">尝鲜AI</div>
-                                  <div className="text-[10px] uppercase tracking-[0.2em] text-black/60">科技日报</div>
-                                </div>
-                              </div>
-                            )}
-                            <p className={`font-display text-xs uppercase tracking-widest ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'} ${isCta ? 'text-center' : ''}`}>
-                              {card.meta}
-                            </p>
-                            <h3 className={`mt-2 font-serif ${isCta ? 'text-center text-[54px]' : isCover ? 'text-[48px]' : 'text-[34px]'}`}>
-                              {card.title}
-                            </h3>
-                            {card.subtitle ? (
-                              <span
-                                className={`mt-3 inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-widest ${
-                                  isCta
-                                    ? dark
-                                      ? 'mx-auto border border-white/20 bg-white/10 text-[#f2efe9]/70'
-                                      : 'mx-auto border border-black/10 bg-white/70 text-black/60'
-                                    : dark
-                                      ? 'bg-[#f2efe9] text-[#121212]'
-                                      : 'bg-brand text-white'
-                                }`}
-                              >
-                                {card.subtitle}
-                              </span>
-                            ) : null}
-                          </div>
-
-                          {isCta ? (
-                            <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-                              <div
-                                className={`relative flex h-28 w-28 items-center justify-center rounded-full border ${
-                                  dark ? 'border-white/30 bg-white/10' : 'border-black/10 bg-white/80'
-                                }`}
-                              >
-                                <div className="pointer-events-none absolute inset-2 rounded-full border border-brand/40" />
-                                <img
-                                  src={logoUrl}
-                                  alt="尝鲜AI Logo"
-                                  data-logo
-                                  className="relative h-16 w-16 rounded-full border border-black/10"
-                                />
-                              </div>
-                              <div className="text-xs uppercase tracking-[0.4em] text-black/50">尝鲜AI · 科技日报</div>
-                              <div className="flex items-center gap-3">
-                                <span className="h-px w-10 bg-brand/60" />
-                                <span className="text-[11px] uppercase tracking-[0.4em] text-black/40">AIGC</span>
-                                <span className="h-px w-10 bg-brand/60" />
-                              </div>
-                              <p className={`max-w-[320px] text-base ${dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
-                                专注于 AIGC 与网络安全行业观察，持续输出可复用的研究内容。
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              {card.stats?.length ? (
-                                <div className="grid grid-cols-2 gap-3">
-                                  {card.stats.map((item) => (
-                                    <div
-                                      key={item.label}
-                                      className={`border p-3 ${dark ? 'border-white/20 bg-white/5 text-[#f2efe9]/80' : 'border-black/10 bg-white/70 text-black/70'}`}
-                                    >
-                                      <div className={`text-[10px] uppercase tracking-[0.2em] ${dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
-                                        {item.label}
-                                      </div>
-                                      <div className="mt-1 text-xl font-semibold">{item.value}</div>
-                                    </div>
-                                  ))}
-                                </div>
-                              ) : null}
-                              <ul className={`mt-4 space-y-2 text-sm leading-relaxed ${dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
-                                {(card.bullets || []).map((point) => (
-                                  <li key={point} className="border-l-2 border-brand/60 pl-3">
-                                    {point}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-
-                          <div className={`flex justify-between text-xs ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
-                            <span>Card {card.id}</span>
-                            <span className="flex items-center gap-2">
-                              <img src={logoUrl} alt="尝鲜AI Logo" data-logo className="h-4 w-4 rounded-full border border-black/10" />
-                              <span>尝鲜AI · 行业研究</span>
-                            </span>
-                          </div>
-                        </div>
-
-                        <div
-                          className={`absolute right-8 top-8 font-display text-xs tracking-[0.4em] ${
-                            dark ? 'text-[#f2efe9]/70' : 'text-black/60'
+                          className={`relative flex h-28 w-28 items-center justify-center rounded-full border ${
+                            card.dark ? 'border-white/30 bg-white/10' : 'border-black/10 bg-white/80'
                           }`}
                         >
-                          NO.{card.id}
+                          <div className="pointer-events-none absolute inset-2 rounded-full border border-brand/40" />
+                          <img
+                            src={logoUrl}
+                            alt="尝鲜AI Logo"
+                            data-logo
+                            className="relative h-16 w-16 rounded-full border border-black/10"
+                          />
                         </div>
-                      </article>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="mt-2 flex justify-center">
-                <div className="glass-card flex items-center gap-2 rounded-full px-3 py-2">
-                  {CARD_DECK.map((card, index) => (
-                    <span
-                      key={card.id}
-                      ref={(el) => {
-                        dotRefs.current[index] = el;
-                      }}
-                      className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-brand' : 'bg-black/20'}`}
-                    />
-                  ))}
-                </div>
-              </div>
-              <p className="mt-2 text-center text-xs text-muted sm:hidden">左右滑动查看卡片</p>
-              {(copyStatus || exportStatus) && (
-                <p className="mt-2 text-center text-xs text-muted">{copyStatus || exportStatus}</p>
-              )}
+                        <div className="text-xs uppercase tracking-[0.4em] text-black/50">尝鲜AI · 科技日报</div>
+                        <div className="flex items-center gap-3">
+                          <span className="h-px w-10 bg-brand/60" />
+                          <span className="text-[11px] uppercase tracking-[0.4em] text-black/40">AIGC</span>
+                          <span className="h-px w-10 bg-brand/60" />
+                        </div>
+                        <p className={`max-w-[320px] text-base ${card.dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
+                          专注于 AIGC 与网络安全行业观察，持续输出可复用的研究内容。
+                        </p>
+                      </div>
+                    ) : (
+                      <div>
+                        {card.stats?.length ? (
+                          <div className="grid grid-cols-2 gap-3">
+                            {card.stats.map((item) => (
+                              <div
+                                key={item.label}
+                                className={`border p-3 ${card.dark ? 'border-white/20 bg-white/5 text-[#f2efe9]/80' : 'border-black/10 bg-white/70 text-black/70'}`}
+                              >
+                                <div className={`text-[10px] uppercase tracking-[0.2em] ${card.dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
+                                  {item.label}
+                                </div>
+                                <div className="mt-1 text-xl font-semibold">{item.value}</div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
+                        <ul className={`mt-4 space-y-2 text-sm leading-relaxed ${card.dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
+                          {(card.bullets || []).map((point) => (
+                            <li key={point} className="border-l-2 border-brand/60 pl-3">
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </BlogPosterCard>
+                )}
+                controls={
+                  (copyStatus || exportStatus) ? (
+                    <p className="mt-2 text-center text-xs text-muted">{copyStatus || exportStatus}</p>
+                  ) : null
+                }
+              />
             </section>
 
             <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
