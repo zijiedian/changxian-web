@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>中国网络安全行业图文卡片（2026）</title>
+    <style>
+      :root {
+        --bg: #f4f6fb;
+        --card: #ffffff;
+        --ink: #0f172a;
+        --muted: #475569;
+        --line: #dbeafe;
+        --brand: #0ea5e9;
+        --brand-2: #22c55e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+        background: radial-gradient(circle at top, #e0f2fe 0%, #f4f6fb 40%);
+        color: var(--ink);
+      }
+      .wrap {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 20px 16px 28px;
+      }
+      .title {
+        margin: 0 0 14px;
+        font-size: 18px;
+        color: #1e293b;
+      }
+      .wx-cards {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 24px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        padding: 0 8px 12px;
+      }
+      .wx-cards::-webkit-scrollbar {
+        height: 8px;
+      }
+      .wx-cards::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      .wx-card {
+        width: 600px;
+        height: 800px;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        border-radius: 28px;
+        background: var(--card);
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+        padding: 34px 34px 30px;
+        display: flex;
+        flex-direction: column;
+      }
+      .cover {
+        background: linear-gradient(150deg, #0ea5e9 0%, #22c55e 85%);
+        color: #fff;
+        border: none;
+      }
+      .meta {
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.82;
+      }
+      .h1 {
+        margin: 14px 0 8px;
+        font-size: 52px;
+        line-height: 1.06;
+        font-weight: 800;
+      }
+      .h2 {
+        margin: 0;
+        font-size: 22px;
+        line-height: 1.45;
+        color: inherit;
+      }
+      .section-title {
+        margin: 16px 0 14px;
+        font-size: 34px;
+        line-height: 1.2;
+      }
+      .desc {
+        margin: 0;
+        font-size: 20px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .grid {
+        margin-top: 16px;
+        display: grid;
+        gap: 12px;
+      }
+      .grid.two {
+        grid-template-columns: 1fr 1fr;
+      }
+      .box {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #f8fafc;
+        padding: 14px;
+      }
+      .k {
+        margin: 0;
+        font-size: 14px;
+        color: #334155;
+        letter-spacing: 0.04em;
+      }
+      .v {
+        margin: 8px 0 0;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .list {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .list li {
+        margin: 10px 0;
+        font-size: 22px;
+        color: #1e293b;
+        line-height: 1.46;
+      }
+      .tagline {
+        margin-top: auto;
+        padding-top: 18px;
+        border-top: 1px solid rgba(255, 255, 255, 0.28);
+        font-size: 16px;
+        opacity: 0.9;
+      }
+      .footer {
+        margin-top: auto;
+        font-size: 16px;
+        color: #64748b;
+      }
+      .accent {
+        color: #0ea5e9;
+        font-weight: 700;
+      }
+      .dark {
+        background: #0f172a;
+        border-color: #0f172a;
+      }
+      .dark .meta,
+      .dark .section-title,
+      .dark .desc,
+      .dark .list li,
+      .dark .footer {
+        color: #e2e8f0;
+      }
+      .dark .box {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      .dark .k {
+        color: #cbd5e1;
+      }
+      .dark .v {
+        color: #f8fafc;
+      }
+      @media (max-width: 640px) {
+        .wrap {
+          padding: 12px 8px 18px;
+        }
+        .title {
+          font-size: 14px;
+        }
+        .wx-cards {
+          gap: 14px;
+          padding: 0 4px 8px;
+        }
+        .wx-card {
+          width: min(90vw, 600px);
+          height: min(120vw, 800px);
+          border-radius: 20px;
+          padding: 20px 18px;
+        }
+        .h1 {
+          font-size: 38px;
+        }
+        .h2 {
+          font-size: 17px;
+        }
+        .section-title {
+          margin-top: 10px;
+          font-size: 26px;
+        }
+        .desc,
+        .list li {
+          font-size: 16px;
+        }
+        .v {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <h1 class="title">中国网络安全行业图文卡片（横向滑动，9 张）</h1>
+      <section class="wx-cards">
+        <article class="wx-card cover">
+          <p class="meta">2026 · 中国网络安全行业研究</p>
+          <h2 class="h1">领域 × 岗位 × 技术</h2>
+          <p class="h2">一套看懂：行业赛道、就业职位、技能要求与成长路径</p>
+          <div class="grid two" style="margin-top: 22px">
+            <div class="box" style="background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.35)">
+              <p class="k" style="color:#dbeafe">产业规模（2023）</p>
+              <p class="v" style="color:#fff">823 亿元</p>
+            </div>
+            <div class="box" style="background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.35)">
+              <p class="k" style="color:#dbeafe">人才缺口（2025）</p>
+              <p class="v" style="color:#fff">300 万+</p>
+            </div>
+          </div>
+          <p class="tagline">尝鲜AI · 基于公开政策与行业资料整理（更新：2026-02-28）</p>
+        </article>
+
+        <article class="wx-card">
+          <p class="meta">01 / 行业驱动</p>
+          <h2 class="section-title">为什么安全岗位在持续增加？</h2>
+          <ul class="list">
+            <li><span class="accent">法规升级</span>：数据合规、个人信息保护、网络安全治理持续强化</li>
+            <li><span class="accent">数字化深化</span>：云化、平台化让攻击面与防护面同时扩大</li>
+            <li><span class="accent">AI 风险外溢</span>：模型、供应链、提示注入等新风险带来新岗位</li>
+            <li><span class="accent">运营化转型</span>：企业从“买设备”转向“持续运营 + 量化治理”</li>
+          </ul>
+          <p class="footer">结论：网络安全已成为长期岗位市场，不再是阶段性投入。</p>
+        </article>
+
+        <article class="wx-card">
+          <p class="meta">02 / 赛道地图</p>
+          <h2 class="section-title">10 大核心领域</h2>
+          <ul class="list">
+            <li>SOC 与检测响应（SIEM / EDR / SOAR）</li>
+            <li>渗透测试与红蓝对抗（攻防演练）</li>
+            <li>数据安全与隐私保护（分级分类 / DLP）</li>
+            <li>云安全与 DevSecOps（K8s / CI-CD）</li>
+            <li>应用与供应链安全、GRC 合规、工控/车联网、AI 安全</li>
+          </ul>
+          <p class="footer">建议：先选赛道，再构建对应技术栈。</p>
+        </article>
+
+        <article class="wx-card dark">
+          <p class="meta">03 / 岗位全景</p>
+          <h2 class="section-title">企业最常招的职位</h2>
+          <ul class="list">
+            <li>SOC 分析师 / 威胁检测 / 应急响应工程师</li>
+            <li>渗透测试工程师 / 红队工程师 / 漏洞研究员</li>
+            <li>云安全工程师 / DevSecOps 工程师</li>
+            <li>数据安全工程师 / 隐私合规专员</li>
+            <li>安全架构师 / 安全产品经理 / 售前顾问</li>
+          </ul>
+          <p class="footer">趋势：岗位从“单点技术”转向“技术 + 合规 + 业务协同”。</p>
+        </article>
+
+        <article class="wx-card">
+          <p class="meta">04 / 技术要求</p>
+          <h2 class="section-title">岗位背后的 6 组硬技能</h2>
+          <div class="grid two">
+            <div class="box"><p class="k">基础设施</p><p class="v">网络协议 / Linux / Windows</p></div>
+            <div class="box"><p class="k">开发能力</p><p class="v">Python / Go / Shell</p></div>
+            <div class="box"><p class="k">检测与运营</p><p class="v">日志分析 / 规则编排 / ATT&CK</p></div>
+            <div class="box"><p class="k">云原生</p><p class="v">K8s / 容器安全 / IaC</p></div>
+            <div class="box"><p class="k">应用安全</p><p class="v">SDL / SAST / DAST / SCA</p></div>
+            <div class="box"><p class="k">合规治理</p><p class="v">等保 / 数据合规 / 审计</p></div>
+          </div>
+        </article>
+
+        <article class="wx-card">
+          <p class="meta">05 / 分岗位拆解</p>
+          <h2 class="section-title">三类高频职位怎么准备？</h2>
+          <ul class="list">
+            <li><span class="accent">SOC 分析师</span>：告警分诊、日志关联、初步溯源与处置闭环</li>
+            <li><span class="accent">渗透测试</span>：Web/API/内网渗透、漏洞复现与修复报告</li>
+            <li><span class="accent">云安全工程师</span>：云配置审计、身份治理、容器工作负载防护</li>
+            <li><span class="accent">数据安全工程师</span>：分类分级、脱敏加密、数据流转审计</li>
+          </ul>
+          <p class="footer">关键：每个岗位都要有“可展示产出物”。</p>
+        </article>
+
+        <article class="wx-card">
+          <p class="meta">06 / 成长路径</p>
+          <h2 class="section-title">0-8 年职业路线图</h2>
+          <ul class="list">
+            <li>0-1 年：打基础（协议/系统/脚本）+ 2 个可复盘项目</li>
+            <li>1-3 年：选一条主赛道，形成“可替代少”的专长</li>
+            <li>3-5 年：从执行走向方案 owner，补架构与协同能力</li>
+            <li>5-8 年：走向架构师/负责人，建立团队与治理体系</li>
+          </ul>
+          <p class="footer">不要只刷题：企业更看重真实问题的解决闭环。</p>
+        </article>
+
+        <article class="wx-card">
+          <p class="meta">07 / 求职打法</p>
+          <h2 class="section-title">简历与面试如何提升通过率？</h2>
+          <ul class="list">
+            <li>简历写“做了什么”不够，要写清“风险降低了多少”</li>
+            <li>项目要有链路：问题定义 → 技术方案 → 结果指标</li>
+            <li>准备 3 类作品：漏洞复现、检测规则、合规整改案例</li>
+            <li>面试多讲复盘：为什么这样选、踩过什么坑、如何改进</li>
+          </ul>
+          <p class="footer">核心竞争力 = 技术深度 × 业务理解 × 交付能力。</p>
+        </article>
+
+        <article class="wx-card">
+          <p class="meta">08 / 一句话总结</p>
+          <h2 class="section-title">中国网络安全就业的主旋律</h2>
+          <p class="desc">
+            未来几年最有价值的安全人才，不是“只会一个工具的人”，而是
+            <span class="accent">能把攻防技术、工程能力和合规治理串成闭环</span>
+            的复合型人才。
+          </p>
+          <div class="grid" style="margin-top: 20px">
+            <div class="box">
+              <p class="k">建议优先级</p>
+              <p class="v">赛道选择 ＞ 项目产出 ＞ 证书堆砌</p>
+            </div>
+            <div class="box">
+              <p class="k">最佳起步组合</p>
+              <p class="v">SOC / 渗透 / 云安全 + 自动化能力</p>
+            </div>
+          </div>
+          <p class="footer">查看完整版研究与 SVG 思维导图：尝鲜AI博客对应文章页面。</p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

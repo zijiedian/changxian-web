@@ -610,8 +610,8 @@ export default function ChinaCybersecurityIndustry2026() {
             <section className="glass-card rounded-3xl p-4 sm:p-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h2 className="text-xl font-semibold text-ink">图文卡片（同页展示）</h2>
-                  <p className="mt-1 text-sm text-muted">与正文在同一页面，可直接横向浏览并导出 PNG。</p>
+                  <h2 className="text-xl font-semibold text-ink">图文卡片</h2>
+                  <p className="mt-1 text-sm text-muted">可直接横向浏览并导出 PNG。</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   <button type="button" onClick={handleCopy} className="soft-button soft-button-primary px-4">
@@ -626,7 +626,7 @@ export default function ChinaCybersecurityIndustry2026() {
               <BlogPosterDeck
                 cards={CARD_DECK}
                 showMobileHint
-                trackClassName="scrollbar-hide mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
+                trackClassName="mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
                 renderCard={(card, { scale }) => (
                   <BlogPosterCard
                     card={card}
@@ -655,13 +655,13 @@ export default function ChinaCybersecurityIndustry2026() {
                             className="relative h-16 w-16 rounded-full border border-black/10"
                           />
                         </div>
-                        <div className="text-xs uppercase tracking-[0.4em] text-black/50">尝鲜AI · 科技日报</div>
+                        <div className="text-xs uppercase tracking-[0.32em] text-black/50">尝鲜AI · 科技日报</div>
                         <div className="flex items-center gap-3">
                           <span className="h-px w-10 bg-brand/60" />
                           <span className="text-[11px] uppercase tracking-[0.4em] text-black/40">AIGC</span>
                           <span className="h-px w-10 bg-brand/60" />
                         </div>
-                        <p className={`max-w-[320px] text-base ${card.dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
+                        <p className={`max-w-[320px] text-base leading-relaxed ${card.dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
                           专注于 AIGC 与网络安全行业观察，持续输出可复用的研究内容。
                         </p>
                       </div>
@@ -674,17 +674,17 @@ export default function ChinaCybersecurityIndustry2026() {
                                 key={item.label}
                                 className={`border p-3 ${card.dark ? 'border-white/20 bg-white/5 text-[#f2efe9]/80' : 'border-black/10 bg-white/70 text-black/70'}`}
                               >
-                                <div className={`text-[10px] uppercase tracking-[0.2em] ${card.dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
+                                <div className={`text-[10px] uppercase tracking-[0.16em] leading-4 ${card.dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
                                   {item.label}
                                 </div>
-                                <div className="mt-1 text-xl font-semibold">{item.value}</div>
+                                <div className="mt-1 text-xl font-semibold leading-none">{item.value}</div>
                               </div>
                             ))}
                           </div>
                         ) : null}
-                        <ul className={`mt-4 space-y-2 text-sm leading-relaxed ${card.dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
+                        <ul className={`mt-4 space-y-2.5 text-sm leading-relaxed ${card.dark ? 'text-[#f2efe9]/80' : 'text-black/70'}`}>
                           {(card.bullets || []).map((point) => (
-                            <li key={point} className="border-l-2 border-brand/60 pl-3">
+                            <li key={point} className="border-l-2 border-brand/60 pl-3 leading-relaxed">
                               {point}
                             </li>
                           ))}
@@ -833,7 +833,7 @@ export default function ChinaCybersecurityIndustry2026() {
                     导图覆盖“行业驱动、赛道领域、岗位族群、技术栈、职业路径、求职策略”六大层次，
                     可直接用于宣讲、培训或求职复盘。
                   </p>
-                  <p className="mt-2 text-xs text-muted">图文卡片已在上方同页展示，可直接导出图片。</p>
+                  <p className="mt-2 text-xs text-muted">图文卡片可直接导出图片。</p>
                   <div className="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white p-3">
                     <img
                       src="/assets/posts/china-cybersecurity-industry-mindmap.svg"

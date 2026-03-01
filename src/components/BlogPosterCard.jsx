@@ -14,16 +14,16 @@ export default function BlogPosterCard({
   return (
     <article
       data-card
-      className={`relative h-[800px] w-[600px] overflow-hidden border shadow-poster ${
+      className={`poster-card relative h-[800px] w-[600px] overflow-hidden border shadow-poster ${
         dark ? 'border-white/20 bg-[#121212] text-[#f2efe9]' : 'border-black/10 bg-[#f2efe9] text-[#1a1a1a]'
       }`}
       style={{ transform: `scale(${scale})`, transformOrigin: 'top left' }}
     >
       <div
-        className={`pointer-events-none absolute inset-0 opacity-70 ${
+        className={`pointer-events-none absolute inset-0 ${
           dark
-            ? 'bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]'
-            : 'bg-[linear-gradient(rgba(0,0,0,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.06)_1px,transparent_1px)]'
+            ? 'opacity-70 bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]'
+            : 'opacity-70 bg-[linear-gradient(rgba(0,0,0,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.06)_1px,transparent_1px)]'
         }`}
         style={{ backgroundSize: '26px 26px' }}
       />
@@ -44,19 +44,21 @@ export default function BlogPosterCard({
         }`}
       />
 
-      <div className="relative z-10 grid h-full grid-rows-[auto_1fr_auto] gap-4 px-10 py-10">
+      <div className="relative z-10 grid h-full grid-rows-[auto_1fr_auto] gap-5 px-10 py-10">
         <div>
           {isCover && logoUrl ? (
             <div className="mb-4 flex items-center gap-3">
               <img src={logoUrl} data-logo alt="尝鲜AI Logo" className="h-10 w-10 rounded-full border border-black/10" />
               <div>
                 <div className="text-xs font-semibold uppercase tracking-[0.3em] text-brand-dark">尝鲜AI</div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-black/60">科技日报</div>
+                <div className={`text-[10px] uppercase tracking-[0.2em] ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
+                  科技日报
+                </div>
               </div>
             </div>
           ) : null}
           <p
-            className={`font-display text-xs uppercase tracking-widest ${
+            className={`font-display text-[11px] uppercase tracking-[0.2em] leading-5 ${
               dark ? 'text-[#f2efe9]/70' : 'text-black/60'
             } ${isCta ? 'text-center' : ''}`}
           >
@@ -64,8 +66,14 @@ export default function BlogPosterCard({
           </p>
           {isCover ? (
             <>
-              <h1 className="mt-2 font-serif text-[60px] leading-[1.02] tracking-wide">{card.title}</h1>
-              <p className={`mt-3 text-lg font-medium ${dark ? 'text-[#f2efe9]/80' : 'text-black/80'}`}>
+              <h1 className="mt-2 overflow-hidden text-balance font-serif text-[clamp(36px,7vw,58px)] leading-[1.06] tracking-[0.01em] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+                {card.title}
+              </h1>
+              <p
+                className={`mt-3 overflow-hidden text-[clamp(16px,2.5vw,20px)] font-medium leading-[1.5] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] ${
+                  dark ? 'text-[#f2efe9]/80' : 'text-black/80'
+                }`}
+              >
                 {card.subtitle}
               </p>
               <span className="mt-4 inline-flex items-center border border-brand/30 bg-brand/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-dark">
@@ -74,7 +82,13 @@ export default function BlogPosterCard({
             </>
           ) : (
             <>
-              <h2 className={`mt-2 font-serif text-[30px] ${isCta ? 'text-center' : ''}`}>{card.title}</h2>
+              <h2
+                className={`mt-2 overflow-hidden text-balance font-serif text-[clamp(24px,4.5vw,34px)] leading-[1.22] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] ${
+                  isCta ? 'text-center' : ''
+                }`}
+              >
+                {card.title}
+              </h2>
               {card.subtitle ? (
                 <span
                   className={`mt-2 inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-widest ${
@@ -94,9 +108,9 @@ export default function BlogPosterCard({
           )}
         </div>
 
-        <div>{children}</div>
+        <div className="poster-content">{children}</div>
 
-        <div className={`flex justify-end text-xs ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
+        <div className={`flex justify-end text-xs leading-5 ${dark ? 'text-[#f2efe9]/70' : 'text-black/60'}`}>
           {logoUrl ? (
             <span className="flex items-center gap-2">
               <img src={logoUrl} data-logo alt="尝鲜AI Logo" className="h-4 w-4 rounded-full border border-black/10" />
@@ -108,13 +122,15 @@ export default function BlogPosterCard({
         </div>
       </div>
 
-      <div
-        className={`absolute right-8 top-8 font-display text-xs tracking-[0.4em] ${
-          dark ? 'text-[#f2efe9]/70' : 'text-black/60'
-        }`}
-      >
-        NO.{card.id}
-      </div>
+      {isCover ? (
+        <div
+          className={`absolute right-8 top-8 font-display text-[11px] tracking-[0.32em] ${
+            dark ? 'text-[#f2efe9]/70' : 'text-black/60'
+          }`}
+        >
+          NO.{card.id}
+        </div>
+      ) : null}
     </article>
   );
 }

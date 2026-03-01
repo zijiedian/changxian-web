@@ -142,22 +142,22 @@ function StatBlock({ label, value, hint, dark }) {
         dark ? 'border-white/20 bg-white/5 text-[#f2efe9]/80' : 'border-black/10 bg-white/70 text-black/70'
       }`}
     >
-      <div className={`text-[10px] uppercase tracking-[0.2em] ${dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
+      <div className={`text-[10px] uppercase tracking-[0.16em] leading-4 ${dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
         {label}
       </div>
-      <div className="font-display text-2xl">{value}</div>
-      {hint ? <div className="text-xs">{hint}</div> : null}
+      <div className="mt-1 font-display text-2xl leading-none">{value}</div>
+      {hint ? <div className="mt-1 text-[11px] leading-5">{hint}</div> : null}
     </div>
   );
 }
 
 function LineItem({ num, title, text }) {
   return (
-    <div className="grid grid-cols-[48px_1fr] gap-3">
-      <div className="font-display text-2xl text-brand">{num}</div>
+    <div className="grid grid-cols-[48px_1fr] gap-2.5">
+      <div className="font-display text-[26px] leading-none text-brand">{num}</div>
       <div>
-        <h3 className="text-base font-semibold text-[#1a1a1a]">{title}</h3>
-        <p className="text-sm text-black/60">{text}</p>
+        <h3 className="text-base font-semibold leading-tight text-[#1a1a1a]">{title}</h3>
+        <p className="mt-1 text-sm leading-relaxed text-black/60">{text}</p>
       </div>
     </div>
   );
@@ -480,7 +480,7 @@ export default function AISecurityC2() {
             <BlogPosterDeck
               cards={cards}
               showMobileHint
-              trackClassName="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
+              trackClassName="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pr-2 select-none cursor-grab active:cursor-grabbing sm:gap-6"
               renderCard={(card, { scale }) => (
                 <BlogPosterCard
                   card={card}
@@ -488,14 +488,9 @@ export default function AISecurityC2() {
                   logoUrl={logoUrl}
                   coverBadgeText="AI 安全专题"
                   coverDecoration={
-                    <>
-                      <div className="pointer-events-none absolute right-4 top-24 font-display text-[120px] leading-none text-black/10">
-                        C2
-                      </div>
-                      <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
-                        SECURITY
-                      </div>
-                    </>
+                    <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
+                      CYBER
+                    </div>
                   }
                 >
                   {renderBody(card)}

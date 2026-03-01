@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 const DEFAULT_TRACK_CLASS =
-  'scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 select-none cursor-grab active:cursor-grabbing';
+  'flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 select-none cursor-grab active:cursor-grabbing';
 
 export default function BlogPosterDeck({
   cards,
@@ -13,9 +13,9 @@ export default function BlogPosterDeck({
   minScale = 0.55,
 }) {
   const trackRef = useRef(null);
-  const dotRefs = useRef([]);
   const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0 });
   const [scale, setScale] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const cardWidth = useMemo(() => 600 * scale, [scale]);
   const cardHeight = useMemo(() => 800 * scale, [scale]);
@@ -39,12 +39,8 @@ export default function BlogPosterDeck({
       const track = trackRef.current;
       if (!track) return;
       const step = cardWidth + gap;
-      const index = Math.round(track.scrollLeft / step);
-      dotRefs.current.forEach((dot, i) => {
-        if (!dot) return;
-        dot.classList.toggle('bg-brand', i === Math.min(index, cards.length - 1));
-        dot.classList.toggle('bg-black/20', i !== Math.min(index, cards.length - 1));
-      });
+      const next = Math.round(track.scrollLeft / step);
+      setActiveIndex(Math.max(0, Math.min(next, cards.length - 1)));
     };
 
     updateDots();
@@ -70,7 +66,7 @@ export default function BlogPosterDeck({
   }, [cardWidth, cards.length, gap]);
 
   const handlePointerDown = (event) => {
-    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (event.pointerType !== 'mouse' || event.button !== 0) return;
     const track = trackRef.current;
     if (!track) return;
     track.setPointerCapture?.(event.pointerId);
@@ -94,42 +90,60 @@ export default function BlogPosterDeck({
     track?.releasePointerCapture?.(event.pointerId);
   };
 
+  const handleDotClick = (index) => {
+    const track = trackRef.current;
+    if (!track) return;
+    track.scrollTo({
+      left: index * (cardWidth + gap),
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <>
-      <div
-        ref={trackRef}
-        className={trackClassName}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerLeave={handlePointerUp}
-      >
-        {cards.map((card) => (
-          <div
-            key={card.id}
-            className="snap-start"
-            style={{ width: `${cardWidth}px`, height: `${cardHeight}px`, flex: `0 0 ${cardWidth}px` }}
-          >
-            {renderCard(card, { scale, cardWidth, cardHeight })}
-          </div>
-        ))}
+      <div className="relative">
+        <div
+          ref={trackRef}
+          className={`poster-track ${trackClassName}`}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+        >
+          {cards.map((card) => (
+            <div
+              key={card.id}
+              className="snap-start"
+              style={{ width: `${cardWidth}px`, height: `${cardHeight}px`, flex: `0 0 ${cardWidth}px` }}
+            >
+              {renderCard(card, { scale, cardWidth, cardHeight })}
+            </div>
+          ))}
+        </div>
+
+        <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-10 bg-gradient-to-r from-white/70 to-transparent md:block" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-10 bg-gradient-to-l from-white/70 to-transparent md:block" />
       </div>
 
       <div className="mt-2 flex justify-center">
         <div className="glass-card flex items-center gap-2 rounded-full px-3 py-2">
           {cards.map((card, index) => (
-            <span
+            <button
+              type="button"
               key={card.id}
-              ref={(el) => {
-                dotRefs.current[index] = el;
-              }}
-              className={`h-2 w-2 rounded-full ${index === 0 ? 'bg-brand' : 'bg-black/20'}`}
+              onClick={() => handleDotClick(index)}
+              aria-label={`跳转到第 ${index + 1} 张卡片`}
+              className={`h-2.5 w-2.5 rounded-full transition-all ${
+                index === activeIndex ? 'scale-110 bg-brand' : 'bg-black/20 hover:bg-black/35'
+              }`}
             />
           ))}
         </div>
       </div>
 
-      {showMobileHint ? <p className="mt-2 text-center text-xs text-muted sm:hidden">左右滑动查看卡片</p> : null}
+      {showMobileHint ? (
+        <p className="mt-2 text-center text-xs text-muted">左右滑动查看卡片（桌面支持按住拖动）</p>
+      ) : null}
 
       {controls}
     </>

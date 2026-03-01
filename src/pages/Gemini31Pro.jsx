@@ -101,22 +101,22 @@ function StatBlock({ label, value, hint, dark }) {
         dark ? 'border-white/20 bg-white/5 text-[#f2efe9]/80' : 'border-black/10 bg-white/70 text-black/70'
       }`}
     >
-      <div className={`text-[10px] uppercase tracking-[0.2em] ${dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
+      <div className={`text-[10px] uppercase tracking-[0.16em] leading-4 ${dark ? 'text-[#f2efe9]/60' : 'text-black/50'}`}>
         {label}
       </div>
-      <div className="font-display text-2xl">{value}</div>
-      {hint ? <div className="text-xs">{hint}</div> : null}
+      <div className="mt-1 font-display text-2xl leading-none">{value}</div>
+      {hint ? <div className="mt-1 text-[11px] leading-5">{hint}</div> : null}
     </div>
   );
 }
 
 function LineItem({ num, title, text }) {
   return (
-    <div className="grid grid-cols-[48px_1fr] gap-3">
-      <div className="font-display text-2xl text-brand">{num}</div>
+    <div className="grid grid-cols-[48px_1fr] gap-2.5">
+      <div className="font-display text-[26px] leading-none text-brand">{num}</div>
       <div>
-        <h3 className="text-base font-semibold text-[#1a1a1a]">{title}</h3>
-        <p className="text-sm text-black/60">{text}</p>
+        <h3 className="text-base font-semibold leading-tight text-[#1a1a1a]">{title}</h3>
+        <p className="mt-1 text-sm leading-relaxed text-black/60">{text}</p>
       </div>
     </div>
   );
@@ -127,21 +127,21 @@ function MetricBars({ metric, rows, panel }) {
   const max = values.length ? Math.max(...values) : 1;
   return (
     <div className={`border ${panel} p-3`}>
-      <div className="text-[10px] uppercase tracking-[0.2em]">{metric}</div>
-      <div className="mt-3 space-y-2 text-xs">
+      <div className="text-[10px] uppercase tracking-[0.16em] leading-4">{metric}</div>
+      <div className="mt-3 space-y-2.5 text-xs">
         {rows.map((row) => {
           const hasValue = typeof row.value === 'number';
           const width = hasValue ? `${(row.value / max) * 100}%` : '0%';
           return (
-            <div key={row.name} className="grid grid-cols-[120px_1fr_44px] items-center gap-2">
-              <span className="truncate text-black/70">{row.name}</span>
+            <div key={row.name} className="grid grid-cols-[112px_1fr_48px] items-center gap-2">
+              <span className="truncate text-[11px] leading-4 text-black/70">{row.name}</span>
               <div className="h-2 rounded-full bg-black/10">
                 <div
                   className={`h-2 rounded-full ${row.highlight ? 'bg-brand' : 'bg-black/30'}`}
                   style={{ width }}
                 />
               </div>
-              <span className="text-right text-black/60">{hasValue ? row.value : '—'}</span>
+              <span className="text-right text-[11px] tabular-nums text-black/60">{hasValue ? row.value : '—'}</span>
             </div>
           );
         })}
@@ -725,7 +725,7 @@ export default function Gemini31Pro() {
           <section className="mt-8">
             <BlogPosterDeck
               cards={cards}
-              showMobileHint={false}
+              showMobileHint
               renderCard={(card, { scale }) => (
                 <BlogPosterCard
                   card={card}
@@ -733,14 +733,9 @@ export default function Gemini31Pro() {
                   logoUrl={logoUrl}
                   coverBadgeText="旗舰特辑"
                   coverDecoration={
-                    <>
-                      <div className="pointer-events-none absolute right-6 top-24 font-display text-[150px] leading-none text-black/10">
-                        3.1
-                      </div>
-                      <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[72px] text-black/10">
-                        PRO
-                      </div>
-                    </>
+                    <div className="pointer-events-none absolute left-8 bottom-28 font-serif text-[64px] text-black/10">
+                      CYBER
+                    </div>
                   }
                 >
                   {renderBody(card)}
